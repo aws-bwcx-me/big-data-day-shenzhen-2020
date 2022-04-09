@@ -1,0 +1,211 @@
+[
+{
+	"uri": "/",
+	"title": "Bigdata-Day",
+	"tags": [],
+	"description": "",
+	"content": "AWS Big Data Day 深圳站 - 2020.08  要完成所有的实验，大概需要 6 小时。所以如果时间允许，可以在Lab3或者Lab4中间挑一个作为家庭作业回去再做。\n 我们的实验使用的区域是AWS的新加坡区域（ap-southeast-1），如果一不小心进入了别的区域，记得在控制台切换回新加坡即可。\n 在本动手训练营中，学员将按步骤的学习如何使用 AWS 的大数据和数据湖的相关服务和组件，顺利完成大数据的收集，存储，处理，分析和可视化的完整的流程。\n   实验编号 实验内容描述 作者     Lab0 实验环境准备工作（这一步不能跳过哦） Weiqiong Chen   Lab1 实时流数据处理，基于 Kinesis 产品家族实现 Xiangquan Liu   Lab2 批量数据处理，基于 EMR(Spark) 实现 Jianqing Weng   Lab3 数据可视化，基于 Quicksight + Athena 实现 Bob Cai   Lab4 数据实时检索，基于 Elasticsearch 实现 Yingfeng Li   Lab5 清理环境 -    为了更好的模拟实际的业务需求，我们构建了一个数据库（模拟历史数据，或者部分客户已经存在的ODS库），我们构建了实时数据流（模拟例如电商，web等的点击流），我们构建了流式实时分析和批量分析的平台以及对应的可视化展现和数据实时检索的平台。如下是此次实验的整体的架构图 为了让大家对数据结构有个更清晰的认识，我们把RDS（关系型数据库）里面的数据表结构做了一层抽象，供参考 "
+},
+{
+	"uri": "/0-prepare.html",
+	"title": "0-实验准备",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节准备工作，大概需要 30 分钟。\n 得先完成准备工作才能进行后续的实验哦。\n 为了顺利完成全部的动手实验，学员们需要做如下准备工作：\n   步骤 准备环境 准备内容描述     01 账号配置 熟悉AWS提供的账号和登录方式，并配置对应安全选项   02 部署EC2 部署一个EC2（Linux）用于操作的客户端并学会远程登录   03 配置KDS 配置 Kinesis Data Streams 实时数据流用于产生数据   04 部署RDS 配置数据库（在实验环境中，理解为历史数据或者ODS环境）   05 部署EMR 部署大数据平台 EMR   06 部署ES 部署实时分析平台 Elasticsearch    文档和版权信息\n 本章作者： Weiqiong Chen 文档版权： 未经许可，亦可转载。\n"
+},
+{
+	"uri": "/1-lab1.html",
+	"title": "1-Lab1(流数据处理)",
+	"tags": ["Kinesis"],
+	"description": "",
+	"content": " 完成本节实验大概需要30分钟。\n 为了使练习更加贴近实际业务场景，我们将模拟从应用程序中生成交易订单事件，在这种情况下是与交易流水、交易日期、客户编号、产品编号和一些数据相对应的事件流。在此教程中，将完成以下三个步骤的实验：\n•\t创建Amazon Kinesis Data Stream\n•\t创建Amazon Kinesis Data Analytics 应用程序\n•\t创建Amazon Kinesis Data Firehose将数据传送到Amazon S3（Lab2和Lab3需要用到）\n上述三个步骤的实验的架构图如下\n文档和版权信息\n 本章作者： Xiangquan Liu\n文档版权： 未经许可，亦可转载。\n"
+},
+{
+	"uri": "/0-prepare/01-iam.html",
+	"title": "01-账号配置",
+	"tags": [],
+	"description": "",
+	"content": " 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。\n 本章节我们配置和安全相关的内容（账号，权限等）。\n获取AWS账号（登录控制台用）  如果已经有AWS的控制台登录账号，用接下来的这个 URL 直接登录即可，可以略过获取账号这部分（但是建议有对应管理权限），需要注意的是我们演示的环境为AWS的新加坡区域，如果学员使用的是国内的区域，则略有区别，仅供参考。\nAWS控制台地址\nhttps://console.aws.amazon.com/console/home 如果是参加现场实验的学员，你会获得一个现场指导老师发给你的 hash 码，类似这样的\n4b8b-0bd9571f14-c4 可以通过如下方式登录实验环境（请自动替换你拿到的 hash 码）\nhttps://dashboard.eventengine.run/login?hash=4b8b-0bd9571f14-c4 通过这个地址登录AWS控制台（第一次需要接受系统协议的提醒） 选择登录控制台 点击“Open AWS Console”直接打开控制台（不需要输入用户密码这些，默认具备管理员权限），请注意绿色方框的 Region 是否正是ap-southesat-1（对应新加坡区域） 其他未提醒的内容不用关注，后面需要用到会有提醒的。\n添加用户（为了获取AKSK）  IAM（Identity and Access Management）是AWS和用户，权限以及认证等安全相关的服务，此处我们主要配置一个只能编程使用的用户（此处为获取对应的aksk，因为市场活动默认的 Hash 码的登录用户不能自己给自己创建 aksk），一个授权的角色（Role）。\n通过如下方式打开IAM控制台 点击左边的“用户”菜单，然后选择“添加用户” 设置用户名（例如此处为cliuser，只选择“编程访问”（获取一对aksk），然后选择“下一步：权限” 在设置权限的页面，点击“直接附加现有策略”，添加 AdministratorAccess 和 IAMFullAccess 两个 下一步标签页面可以不配置，接着下一步审核页面，确认策略已经正确添加 用户创建成功后，有个AKSK（“访问密钥ID”又叫“AK”，“私有访问密钥”叫“SK”）需要妥善保存（仅此一次保存csv文件的机会），当然，在创建用户的时候，SK也可以看到明文（仅此一次在控制台看到SK的明文的机会，以后就只能去csv文件看）。 配置角色（后面的实验需要用到）  在IAM控制台，选择左边的“角色”菜单，然后选择“创建角色” 选择对应的角色类型（选择“AWS产品”，然后选择“Glue”） 在筛选策略的页面，选中 AdministratorAccess 和 IAMFullAccess，然后点击下一步，不配置标签，直接审核角色配置，设置名字（此处为lab-role），确认策略，然后确认即可  恭喜你，已经完成第一步的实验准备工作。\n"
+},
+{
+	"uri": "/0-prepare/02-ec2.html",
+	"title": "02-部署EC2",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节的实验，大概需要 10 分钟。\n 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。\n 本章节内容主要部署一个 EC2 实例（Linux）及使用不同的客户端连接（也是作为Lab1/2/4持续产生数据的客户端）。\n配置安全组  EC2（Elastic Compute Cloud）是AWS云上的计算服务，此处我们主要配置安全组（允许谁可以连接），部署一个EC2，并远程连接上去，在这个EC2里面配置好AKSK即可。\n通过如下方式打开EC2控制台 选择左侧菜单的“安全组”，在打开的页面中，选择“default”（即默认）安全组，然后选中“入站规则”，点击“编辑入站规则” 注意：我们严重不建议在生产环境中，把任何安全组做全开这种配置，这明显不符合安全最佳实践原则，此处仅供参考。\n 此处我们选择全部放开（极度极度极度的不推荐），主要是考虑到有些人可能是第一次使用AWS，所以我们没有遵循权限最小化原则（其实主要是放开ssh的22端口，mysql的3306端口以及redis的6379端口即可） 不要修改“出站规则”，保持默认值（全开）即可。\n 配置完的安全组“入站规则”如下（注意，不要去编辑“出站规则”，保持默认值即可） 部署EC2  EC2简单理解为AWS云上的虚拟机即可。打开EC2控制台 选择左侧菜单的“实例”，并点击“启动实例”（注意：如果你的控制台页面样子跟我们的截图不一样，请确认左上角的控制台版本选项） Amazon Linux 2 简单理解为 CentOS 的 Amazon 版本。\n 选择AMI（Amazon Machine Image）类型为“Amazon Linux 2”，并确认架构为64位x86 机型选择t2.large或者t2.xlarge都可以（t3对应系列也可以，基本没什么负载，本着节俭的原则，选个2G以上内存的都可以满足需求） 实例配置这一页，全部默认 此处我们把这个EC2的根磁盘改成20G（默认8G，其实实验也够了，但是担心有人中间过程有错误，疯狂的打印错误日志导致根目录爆了，所以调整为20G），注意“终止时删除”的选项是选中的（默认值） 下一步标签页面，我们添加一个“键”为“Name”（注意大小写），“值”为“LinuxClient”的标签，供参考（标签可以不设置） 下一步配置安全组的时候，直接选择刚才修改过的安全组（default）即可 下一步审核页面可以确认下配置，然后直接点击“启动”，接下来会提示使用哪个密钥对（keypair）部署这个EC2，此处我们选择新建一个，并保存到本地（注意：也只有这一次可以保存，后续不能再下载了，如果要更换密钥很麻烦） 保存密钥并启动EC2 部署提交成功后，我们可以发现EC2已经开始交付，并获得对应的外网地址 此处EC2的外网地址为（如果手工停止Stop这个EC2，然后再启动Start这个EC2，这个外网IP地址会变，如果终止Terminate这个EC2，它就被删除了）\n54.169.129.145 连接EC2  如果学员使用的是Windows系统，使用例如putty这样的客户端，则需要对刚才生成的密钥做个转换才可以连接部署出来的EC2。\n Linux(Mac)客户端连接此EC2 因为我们已经放开了安全组权限，所以找到之前下载的密钥地址（如此处为 ~/Downloads/ ），把密钥权限改成400，然后就可以直接登录了（注意登录用户是ec2-user）\ncd ~/Downloads/ chmod 400 kp-sin.pem ssh -i kp-sin.pem ec2-user@54.169.129.145 登录后如下所示 Windows客户端连接此EC2 此章节大家也可以参考AWS官方文档\nhttps://docs.aws.amazon.com/zh_cn/AWSEC2/latest/UserGuide/putty.html 此处我们需要使用到 putty（客户端）和 puttygen（转换密钥的工具），大家可以去官网下载\nhttps://www.chiark.greenend.org.uk/~sgtatham/putty/ 为了方便大家使用，我们已经给大家准备好了，可以直接从下面这里下载（Windows，64位）\n  putty and puttygen   putty.exe (1 )   puttygen.exe (680 )    下载好了以后，启动 puttygen.exe 文件，把下载的密钥key文件做个转换并保存。过程如下\n1).在 Type of key to generate 下，选择 RSA： 2).选择 Load，选择在启动实例时指定的密钥对的 .pem 文件，然后选择 Open (打开)。PuTTYgen 会显示一个通知，指示已成功导入 .pem 文件。\n3).为密钥指定您用于密钥对的相同名称（例如 kp-bdd-sin-com）并选择 Save (保存私钥)。PuTTY 会自动添加 .ppk 文件扩展名。 4).打开 putty.exe，输入EC2实例地址 配置key： 出现login as输入提示框的时候，输入：ec2-user，即可顺利登录EC2实例 配置EC2  此处只配置aksk并简单验证ec2具备对应权限。\n 登录EC2后，执行配置\naws configure 然后输入创建用户时获得的AKSK（或者打开下载的csv文件找到AKSK），以及对应的region（ap-southeast-1），然后执行权限测试命令\naws s3 ls 不会有任何返回，因为我们还没开始做实验，S3是空的，只要不报错，就表示配置是成功的。  恭喜你，已经完成第二步的实验准备工作。\n"
+},
+{
+	"uri": "/0-prepare/03-kds.html",
+	"title": "03-配置KDS",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节的实验，大概需要 5 分钟。\n 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。\n 本章节内容主要配置两个Kinesis Data Streams数据流（有时简称为kds，作为Lab1/4持续产生数据的来源）。\n创建KDS流  Kinesis是AWS云上的流计算相关服务，包括流数据接收和承载平台Kinesis Data Streams（对标Kafka），流处理管道Kinesis Data Firehose，流分析平台Kinesis Data Analytics，流视频处理平台Kinesis Video Streams。此处我们主要配置2个Kinesis Data Streams，分别用于Lab1/4使用。\n通过如下方式打开Kinesis控制台 选择左侧菜单的“数据流”，在打开的页面中，选择“创建数据流” 创建lab1需要用到的数据流（设置流名称和分片数量，此处设置为1即可） 用同样的方式创建lab2（在我们实验的过程中暂时用不到，此处仅供演示）和lab4需要用到的数据流，创建完毕后如下  恭喜你，已经完成第三步的实验准备工作。\n"
+},
+{
+	"uri": "/0-prepare/04-rds.html",
+	"title": "04-部署RDS",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节的实验，大概需要 10 分钟。\n 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。\n 本章节内容主要是部署一个关系型数据库（RDS，MySQL 5.7），并导入对应数据。\n登录RDS控制台  RDS是AWS云上的数据库平台服务，包括自主研发的Aurora，也包括基于MySQL/MariaDB/Oracle/SQL Server/PostgreSQL等不同引擎的关系型数据库，此处我们部署的RDS（MySQL 5.7）主要用于Lab2使用。\n通过如下方式打开RDS控制台 配置参数组和选项组  选择左侧菜单“参数组”，然后点击右侧“创建参数组” 选择参数组系列为“mysql5.7”，然后输入对应的名字和描述，点击“创建”即可 创建完毕后，点击参数组名字后打开刚才创建的参数组 在参数那里输入character_，并选择“编辑参数” 因为我们要在命令行操作中文内容的记录，所以需要修改数据库的编码，否则容易出现乱码的问题。此处我们把所有能修改的“值”全部改成utf8mb4，并点击“保存更改”即可 选择左侧菜单“选项组”，然后点击右侧“创建组” 输入对应的名字，备注，引擎和版本后保存，即可 部署RDS数据库  选择左侧菜单“数据库”，然后点击右侧“创建数据库” 接下来选择数据库的引擎，版本和模板，如截图所示 接下来设置数据库实例名称，管理员名称和密码（此处为：QazWsx2020，可自定义，主要是自己要记住别忘记）以及选择数据库类型 存储，可用性和网络连接选默认值即可 数据库使用“密码身份认证”方式，点开“其他配置”，输入数据库名字（此处为bdd），选择刚才创建的“参数组”和“选项组”，其他全部默认，拉到最下面点击“创建数据库”即可 要数据库完全准备好，大概需要5分钟左右。\n 数据库准备好以后，点击数据库名字，出现连接和安全性页面，把对应的终端节点内容复制出来，此处为\nbdd.cmyyzdtxltwq.ap-southeast-1.rds.amazonaws.com 如下图所示 导入数据  大家把如下sql下载到部署好的EC2客户端里面   bdd database sql   bdd.sql (3 )    然后登陆EC2客户端，安装mysql客户端\nsudo yum install mysql -y 然后使用mysql客户端用如下命令登录数据库（紧接着需要输入密码）\nmysql -h bdd.cmyyzdtxltwq.ap-southeast-1.rds.amazonaws.com -u admin -p bdd 使用命令导入数据（如果上传和保存的目录不是 ~/sql/bdd.sql，记得同步修改）\nsource ~/sql/bdd.sql 然后检查数据库内容是否和截图匹配 此处我们有4个表，内容分别如下\n   表名 内容 行数     tbl_address 客户地址信息表 1084   tbl_customer 客户表 1084   tbl_product 产品信息表 100   tbl_transaction 历史交易记录表 49874     恭喜你，已经完成第四步的实验准备工作。\n"
+},
+{
+	"uri": "/0-prepare/05-emr.html",
+	"title": "05-部署EMR",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节的实验，大概需要5分钟，因为我们只部署EMR，暂时不用做配置工作。\n 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。\n 本章节内容只需要部署一个EMR集群，暂时不做配置。\n部署EMR  EMR（Elastic MapReduce）是AWS上的一个托管集群平台，可简化在 AWS 上运行大数据框架（如 Apache Hadoop 和 Apache Spark 等）以处理和分析海量数据的操作。\n通过如下方式打开EMR控制台 直接选择“创建集群” 出现创建页面的时候，选择“转到高级选项” 选择对应的版本（默认最新版），选择Spark（Lab2需要用到），勾选使用Glue做Catalog，然后进入下一步 第二步的硬件配置页面，全部选默认即可 第三步的配置集群信息，参考如下截图 然后选择对应的密钥对（此处为kp-sin），点击“创建集群”即可 集群全部部署完毕需要5分钟左右，但是我们不需要等待，因为Lab2才需要用到。\n 恭喜你，已经完成第五步的实验准备工作。\n"
+},
+{
+	"uri": "/0-prepare/06-es.html",
+	"title": "06-部署Elasticsearch",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节的实验，大概需要5分钟，因为我们只部署ES，暂时不用做配置工作。\n 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。\n 本章节内容只需要部署一个Elasticsearch集群，暂时不做其他配置。\n部署Elasticsearch  Elasticsearch Service (Amazon ES) 是一种托管服务，可以让您轻松在 AWS 云中部署、操作和扩展 Elasticsearch 集群。\n通过如下方式打开ES控制台 如果是第一次使用，会出现如下页面，选择“创建新域”即可 我们选择开发测试和最新版 在配置页面我们设置集群名字（此处为lab-es），并设置数据节点的EBS磁盘大小为100G 在安全配置页面，我们选择部署在vpc内部（这样公网就访问不了），并选择对应的网络和安全组，取消选择“启用精细访问控制”，并在VPC内“允许对域进行公开访问”，如下截图所示 其他设置默认，审核请确认后创建集群。集群Domain全部部署完毕需要10分钟左右，但是我们不需要等待，因为Lab4才需要用到。\n 恭喜你，已经完成第六步的实验准备工作。接下来开始真正的大数据和数据湖相关的动手实验了。\n"
+},
+{
+	"uri": "/2-lab2.html",
+	"title": "2-Lab2(批量数据处理)",
+	"tags": ["Glue", "ETL"],
+	"description": "",
+	"content": " 完成本节实验大概需要60分钟。\n 在本练习中，您将学习如何使用Amazon EMR（Spark）和AWS Glue（ETL）构建批量数据分析处理程序。为了使本实验的练习更加贴近实际的业务场景，我们模拟了完整的从数据产生（模拟历史数据和流数据）、数据存储、数据处理、到数据分析和数据可视化的完整过程（数据可视化在Lab3/Lab4中完成）。\n具体可参考如下架构图： 组件说明如下：\n •\tRDS作为Lab2次实验的历史数据源，RMDBS格式，包含人员信息表tbl_customer、产品信息表tbl_product、地址信息表tbl_address、交易历史流水表tbl_transaction，等4张表，参与批处理计算；\n•\tLab1实验中Kinesis的输出（存放在Lab1指定的S3文件夹中，Json格式），为近实时当日交易流水，也可以作为Lab2批处理的输入，参与批处理计算（注意：学员可以考虑使用Lab1的输出数据或者使用我们提前准备好的数据）；\n•\tS3桶作为数据湖的存储基础，包含input文件夹（用于EMR Spark批处理的输入），存放通过Glue ETL加载进来的RDS历史数据源和Kinesis当日近实时数据，以Parquet格式存放。output文件夹，存放EMR Spark批处理的结果数据（Parquet格式）；\n详细的数据流步骤说明如下： 具体说明如下：\n 1.1\t通过Glue Crawler功能爬取RDS库中4张表的元数据和Kinesis输出的数据的元数据；\n1.2\tGlue Crawler将爬取RDS和Kinesis的元数据，存入到Glue的Data Catalog数据库；\n1.3\tGlue ETL通过Data Catalog识别RDS表元数据和Kinesis元数据，以便ETL作业引用；\n1.4\tGlue ETL加载4张表数据和Kinesis输出的数据，到指定的S3存储桶的input文件夹中，作为Spark批处理的数据源输入；\n1.5\t通过Glue Crawler功能爬取S3桶中input文件夹中数据的元数据；\n1.6\tGlue Crawler将爬取input文件夹中数据的元数据，存入Glue的Data Catalog数据库；\n1.7\tEMR Spark环境通过Data Catalog获取input文件夹的元数据，进而开展批处理作业；\n1.8\t将EMR Spark批处理作业的结果输出至指定的S3存储桶的output文件夹中；\n1.9\t通过Glue Crawler功能爬取S3桶中output文件夹中数据的元数据；\n2.0\tGlue Crawler将爬取output文件夹中数据的元数据，存入Glue的Data Catalog数据库；\n2.1 利用Athena服务，查询input、output数据；\n其中步骤 1.9/2.0/2.1 和 Lab3 有重叠，所以在此处不做演示或说明。\n文档和版权信息\n 本章作者： Jianqing Weng\n文档版权： 未经许可，亦可转载。\n"
+},
+{
+	"uri": "/1-lab1/11-kds.html",
+	"title": "11-Kinesis流数据产生",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节的实验，大概需要10分钟。\n 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。\n 本实验模拟产生流数据。\n发送模拟数据  登录准备阶段部署的EC2，保存如下代码到ec2-user的home目录下   lab1.sh   lab1.sh (1 )    然后执行如下代码开始给Kinesis Data Streams流平台发送模拟数据（这个2020-09-04在系统内是个交易日期，方便后续作为关键字查找，没有特殊的含义）\ncd ~ sh lab1.sh kds-lab1 2020-09-04 \u0026amp; 系统会生成一个日志文件，查看同一个目录下的日志文件，出现如下字样表示启动成功 准备S3存储桶  点击控制台右上角的账号下拉框，可以看到对应的账号，如 此处为\n519201465192 因为S3桶是全球唯一的命名，所以为了区分，我们采用如下的方式命名S3存储桶，如下所示\nlab-519201465192-sin-com 打开EC2客户端，使用如下命令创建S3桶（也可以直接在控制台创建，此处略）\naws s3 mb s3://lab-519201465192-sin-com/ aws s3 ls 如下 我们会发现有两个S3的存储桶（因为有一个是之前部署EMR集群的时候的日志桶）。\n创建S3终端节点  为了方便内网访问S3存储桶，此处我们配置S3终端节点。登录并打开VPC控制台，往下拉选择左边的终端节点： 选中S3（在搜索框里面输入s3并回车即可搜索），选择对应VPC（此处我们只有一个默认VPC）和路由表： 其他默认，点击“创建终端节点”即可。\n"
+},
+{
+	"uri": "/1-lab1/12-kas.html",
+	"title": "12-Kinesis流数据分析",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节的实验，大概需要20分钟。\n 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。\n 本实验演示配置数据流管道（为Lab2/3准备），并实时对流数据进行在线分析等。\n配置Kinesis Data Firehose  KFH（Kinesis Data Firehose）是提供实时交付的完全托管服务，可以把流数据发往诸如 Amazon Simple Storage Service （Amazon S3)， Amazon Redshift， Amazon Elasticsearch Service （Amazon ES)、Splunk以及支持的第三方服务提供商（包括DatAdog、MongoDB和NewRelic）拥有的任何自定义HTTP端点或HTTP端点。\n打开Kinesis管理控制台（确保当前的区域选择是新加坡），在左侧菜单栏选择传输流，在界面上点击“创建传输流” 输入传输流的名字（此处为 lab1-kfh），并选择准备过程中创建的Kinesis数据流（此处为kds-lab1），然后点击下一步 第二步处理记录选择默认，第三步目标我们选择S3，并选择之前创建的存储桶（此处为：lab-519201465192-sin-com） 然后在S3前缀和后缀分配输入名字lab1-input/和lab1-error/，如下 配置缓冲的时候，设置为“1”M和“60”秒，其他默认，点击下一步，然后审核并点击“创建传送流” 大概过1分钟左右，就可以在S3存储桶里面看到对应的数据输出。\n配置Kinesis Data Analytics  打开Kinesis管理控制台（确保当前的区域选择是新加坡），在左侧菜单栏选择“分析应用程序”，在界面上点击“创建应用程序”，然后输入名字（此处为kas-lab1）和运行时（SQL）即可 创建成功后，选择连接数据流（连接到之前准备阶段创建的kds数据流，此处为kds-lab1，已经通过脚本在送数据了） 然后点击左下角的发现架构，开始获取元数据 发现后的架构和数据格式跟我们预期的一致，所以此处不做更改，直接保存即可 接下来我们选择用SQL做实时分析 确认启动它 然后使用如下SQL代码，保存并运行（我们此处演示按1分钟聚合，如果有其他聚合时间要求，可以修改最下面的60这个数字即可）\nCREATE OR REPLACE STREAM \u0026#34;DESTINATION_SQL_STREAM\u0026#34; (count_tno integer,sum_tnum integer); CREATE OR REPLACE PUMP \u0026#34;STREAM_PUMP\u0026#34; AS INSERT INTO \u0026#34;DESTINATION_SQL_STREAM\u0026#34; SELECT STREAM count(*), sum(\u0026#34;tnum\u0026#34;) FROM \u0026#34;SOURCE_SQL_STREAM_001\u0026#34; GROUP BY FLOOR((\u0026#34;SOURCE_SQL_STREAM_001\u0026#34;.ROWTIME - TIMESTAMP \u0026#39;1970-01-01 00:00:00\u0026#39;) SECOND / 60 TO SECOND); 略微等待一小段时间，我们即可看到运行结果，如下所示（和我们的代码预期一致，一分钟一次聚合） 可以在目标页面把查询结果输出到别的地方，例如别的流，别的S3存储桶等用于业务用途，此处不做演示。\n 恭喜你，已经完成第一个关于流数据处理的动手实验（Lab1）。\n"
+},
+{
+	"uri": "/3-lab3.html",
+	"title": "3-Lab3(数据可视化)",
+	"tags": ["Athena", "Quicksight"],
+	"description": "",
+	"content": " 完成本节实验大概需要30分钟。\n 在本练习中，您将学习如何使用Amazon QuickSight 和Athena平台构建数据可视化应用程序。您将看到如何使用Amazon 的完全托管的数据可视化工具，用于大数据和数据湖场景的业务视角提炼和展现。\n本实验的目标包括：\n1、\t使用Glue添加数据库\n2、\t利用爬网程序将S3的数据文件作为数据表添加到数据库\n3、\t使用Athena对数据表进行查询\n4、\t使用Quicksight对数据表进行可视化，生成三张示例维度表\n本实验的架构图如下 文档和版权信息\n 本章作者： Bob Cai\n文档版权： 未经许可，亦可转载。\n"
+},
+{
+	"uri": "/2-lab2/21-etl.html",
+	"title": "21-数据处理（ETL）",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节的实验，大概需要40分钟。\n 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。\n 本实验演示数据处理的过程（ETL过程，此处我们使用AWS Glue服务），数据分析在下个章节。\n连接到RDS  登录并打开AWS Glue控制台（确认在AWS的新加坡区域），选择添加数据库连接： 设置连接名称（Lab2-Glue-RDS-connection）和类型 选择对应配置（请输入之前部署rds时admin的密码，此处为QazWsx2020） 审核并完成，然后开始连接测试，测试时需要使用第一步创建的role（这是在准备阶段创建的IAM角色 lab-role） 需要1-2分钟的时间，略微等待即可 爬取RDS元数据  创建名为my-lab2-crawler-rds的爬网程序 设置爬网程序名称 配置对应参数（包含路径那里输入：bdd/%） 选择对应的role 配置输出（点击添加数据库，名字为default即可） 完成后，运行爬网程序，爬取成功后，元数据目录中会出现4张RDS元数据表 爬取kinesis输出的元数据  创建名为my-lab2-crawler-kinesis的爬网程序 添加数据存储（此处选择Lab1的输出） 选择对应的role 配置输出 完成后，运行爬网程序，元数据目录中会出现1张Kinesis元数据表 合并rds和kinesis的数据输出到s3  此处需要一个作业处理脚本   Glue to S3 code   glue-to-s3.glue (5 )    把这个脚本上传到S3桶内，例如 创建ETL作业 配置作业属性 选择对应连接，然后选择“保存作业并编辑脚本” 确认表名和输出位置的桶名是否正确，参考下图（一定要确认爬虫爬取出来的表名和S3桶名字的正确性） 作业运行中（根据数据量不同，所需时间略有不同），考虑到Kinesis Data Streams在不停的打进来数据，所以每次跑EMR任务之前，这个都需要运行一次，否则数据就不是最新的，可以考虑按某个时间间隔（例如天）运行一次 作业运行完成后，可检查s3://lab-519201465192-sin-com/spark/input/目录下的\u0026quot;tbl_customer、tbl_product、tbl_address、tbl_transaction\u0026quot;文件夹中，是否产生对应的parquet格式的数据，以验证ETL作业是否执行成功。 爬取合并在S3上的输出的元数据  创建名为my-lab2-crawler-s3的爬网程序 配置存储的包含路径为前一个任务的输出地（此处为：s3://lab-519201465192-sin-com/spark/input） 配置IAM角色 配置输出 审核并确认完成。然后运行爬网程序，元数据目录中会出现4张input文件夹中数据的元数据表 现在我们合并了历史数据，有了不断输入的流数据（如果需要实时的流数据结果，需要运行一遍上面的作业），接下来就可以开始下一步的分析数据了。\n"
+},
+{
+	"uri": "/2-lab2/22-emr.html",
+	"title": "22-数据分析（EMR）",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节的实验，大概需要20分钟。\n 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。\n 本实验演示数据分析的过程（Spark），数据处理（ETL）在上个章节。\n登录EMR Master  如果按照实验准备的环节部署的EMR集群，是可以直接远程登录Master节点的，不过需要放开Master节点的22端口。\n打开控制台关于安全组的页面（可以从VPC控制台或者EC2控制台进入），修改Master相关的安全组（此处为：sg-06cc1d3bc1ff83213 - ElasticMapReduce-master），编辑它的入站规则，添加22端口许可，然后保存即可（其他的不要动） 确认EMR集群状态时绿色状态，点击“Connect to the Master Node Using SSH” 出来一个弹窗，显示如何连接Master节点（使用之前创建的密钥以及hadoop用户登录）\nssh -i kp-sin.pem hadoop@ec2-54-169-47-78.ap-southeast-1.compute.amazonaws.com 登录后如下图所示 提交任务  提交任务的方式有两种，一种是spark-shell的方式，一种是spark-submit的方式。\n用spark-shell提交 登录Master节点后，输入spark-shell命令，启动spark-shell环境，使用如下代码生成聚合数据集（注意检查表名称必须一致，且复制的时候别出现换行的问题\u0026ndash;这个在windows下的记事本最容易出现）\nval result = spark.sql(\u0026quot;SELECT tt.tno tno, tt.tdate tdate, tt.uno uno, tt.pno pno, tt.tnum tnum, tc.uname uname, tc.umobile umobile, ta.ano ano, ta.acity acity, ta.aname aname, tp.pclass pclass, tp.pname pname, tp.pprice price FROM s3_tbl_transaction tt, s3_tbl_customer tc, s3_tbl_address ta, s3_tbl_product tp WHERE tp.pno = tt.pno and tt.uno = tc.uno and tc.ano = ta.ano ORDER BY tt.tuptime desc\u0026quot;); 然后查询schema是否符合我们预期\nresult.printSchema(); 结果如下 接下来把结果输出到S3即可（注意S3桶的名称）\nresult.write.format(\u0026quot;parquet\u0026quot;).mode(\u0026quot;append\u0026quot;).save(\u0026quot;s3://lab-519201465192-sin-com/spark/output\u0026quot;); 去对应S3目录（s3://lab-519201465192-sin-com/spark/output）查看是否正常输出结果（这些结果会在Lab3里面用到）。 用spark-submit提交（可选） 我们已经准备好java实验代码，可以从这里下载并上传到S3上（例如上传保存在s3://lab-519201465192-sin-com/code/spark/）   spark-submit   original-emr-0.0.1-SNAPSHOT.jar (11 )    登录Master节点后，输入spark-submit提价任务（注意，为了不和上面spark-shell提交的任务冲突，我们把这个任务的结果保存到output2目录下了，如果有同学还停留在上一步的spark-shell的环境中，记得退出来）\nspark-submit --master yarn --deploy-mode client --class com.demo.emr.spark.Lab2 s3://lab-519201465192-sin-com/code/spark/original-emr-0.0.1-SNAPSHOT.jar s3://lab-519201465192-sin-com/spark/output2 如果在此期间没有去重复执行glue的合并数据的作业的话，这个输出结果跟上面的结果是一致的  恭喜你，已经完成第二个关于批量数据处理的动手实验（Lab2）。\n"
+},
+{
+	"uri": "/4-lab4.html",
+	"title": "4-Lab4(数据实时检索)",
+	"tags": ["Kinesis", "Elasticsearch"],
+	"description": "",
+	"content": " 完成本节实验大概需要30分钟。\n 在本练习中，您将学习如何使用Amazon Kinesis流式传输数据到Elasticsearch并进行分析，这是两项完全托管的基于云的服务，用于实时传输大型分布式数据流和查询，分析等。\n为了使练习更加贴近实际业务场景，我们将模拟从EC2的应用程序中生成交易订单事件。\n在此教程中，您将完成以下三个组件的实验：\n 创建Amazon Kinesis Data Stream 创建Amazon Kinesis Data Firehose 部署Amazon Elasticsearch  本实验的架构图如下 文档和版权信息\n 本章作者： Yingfeng Li\n文档版权： 未经许可，亦可转载。\n"
+},
+{
+	"uri": "/3-lab3/31-athena.html",
+	"title": "31-构建数据表",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节的实验，大概需要10分钟。\n 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。\n 本实验演示通过Athena和Glue构建数据表的过程。\n准备数据库和表  登录并打开Glue控制台，点击左侧菜单栏“数据库” 点击“添加数据库”按钮，名称为：athenadb 创建完毕后，点击athenadb数据库，并选择“athenadb中的表” 点击“使用爬网程序添加表”，名称为athenadbcrawler 在“包含路径”里面，选择Lab2的EMR输出目录 选择对应IAM Role 选择数据库“athenadb”，添加表前缀：athena_,点击下一步 点击完成后运行爬网程序，点击“表”查看 确认，athena_output已经在里面（如果上一个实验的设置不一样，那么也许这个名字略微有点区别） 构建表  登录并进入Athena控制台，在左侧菜单，选择AwsDataCatalog，在Database选择athenadb，可以看到athena_output表 在右上角的“设置”里面配置好查询结果路径到S3的目录，建议在bucket里面建目录athena-result 执行SQL语句\nSELECT * FROM athena_output limit 10 如果“运行查询”的按钮是灰色的，可以直接使用 Ctrl + Enter 运行查询，然后很快就可以看到实时查询结果 使用如下sql构建按日期的销售额（为了防止数据不均衡导致图比例尺严重失调，我们去掉了流数据的日期的交易额，此处为2020-09-04）\nSELECT sum(price*tnum) AS total_revenue, tdate FROM athena_output WHERE tdate\u0026lt;\u0026gt;'2020-09-04' GROUP BY tdate; 把他保存成表 名称是：revenue_day_view 用如下sql查询并保存成表：revenue_pclass_view，过程略\nSELECT sum(price*tnum) AS total_revenue, pclass FROM athena_output GROUP BY pclass; 用如下sql查询并保存成表：revenue_city_view，过程略\nSELECT sum(price*tnum) AS total_revenue, acity FROM athena_output GROUP BY acity; 表构建完毕后如下图所示  恭喜你，表构建完毕，可以开始可视化了。\n"
+},
+{
+	"uri": "/3-lab3/32-quicksight.html",
+	"title": "32-数据可视化",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节的实验，大概需要20分钟。\n 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。\n 本实验演示通过Quicksight构建可视化图表的过程。\n第一次使用Quicksight的配置  此处仅供未激活 Quicksight 服务的客户第一次参考使用，已经激活的客户，请选择新加坡区域即可。\n 如果是第一次使用，需要先启用 Quicksight 服务 选择企业版并继续 选择新加坡区域，以及对应的账号名字，接受提醒的邮箱地址等 必须勾选Athena和S3支持，当选择S3支持的时候，在弹出的窗口中把对应的桶选上 构建图表展示  登录控制台后，点击左侧菜单数据集 点击 新数据集，选择Athena 输入athena_ds，点击创建数据源 选择athenadb，选择revenue_day_view，点击选择 选择 “直接查询您的数据” 在可视化界面，视觉对象类型选择垂直条形图，在字段列表选择 tdate，值选择 total_revenuw。可以查看到按日期统计的销售额 熟悉图形化界面操作的学员可以做各种类型的图表试试看，此处不再一一演示。\n 恭喜你，你已经完成了数据可视化的实验（Lab3）。\n"
+},
+{
+	"uri": "/5-cleanup.html",
+	"title": "5-环境清理",
+	"tags": [],
+	"description": "",
+	"content": " 完成本节大概需要10分钟。\n 如我们整体架构图所描述，我们在这4个动手实验里面用到了很多AWS的管理服务 本着节俭的原则，虽然参加AWS市场活动时创建的账号会自动注销，但是也建议每一位学员能跟使用自己（或自己公司）的账号一样，在实验完毕后把环境清除了。\n主要需要清除的内容如下\n 1.删除掉部署的EC2（这是数据的源头），先清除EC2能避免后续的数据产生； 2.删除Kinesis的各个流，管道和分析； 3.删除RDS数据库； 4.删除EMR集群； 5.删除Elasticsearch集群； 6.删除Glue的相关配置爬虫和任务等； 7.删除实验过程中创建的S3存储桶；  【注意】如果没有其他任何地方使用到了Quicksight服务，也建议把此服务注销，请参考官方文档\nhttps://docs.aws.amazon.com/zh_cn/quicksight/latest/user/closing-account.html 本实验到此结束，感谢你的支持。\n~完~\n"
+},
+{
+	"uri": "/4-lab4/41-widtable.html",
+	"title": "41-构建宽表",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节的实验，大概需要20分钟。\n 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。\n 因为Elasticsearch最多只支持2个表的Join查询，而我们的表有4个，所以为了更好的在Elasticsearch里面使用，我们通过脚本对数据进行了一定的处理，做成了宽表的模式。\n准备表数据  登录之前部署的EC2客户端，上传这三个文件，放到一个专门的目录下，例如“/home/ec2-user/csv”下   需要导入Redis的表文件   tbl_address.csv (89 )   tbl_customer.csv (74 )   tbl_product.csv (6 )    查看目录\ncd ~/csv ls -l |grep .csv 如下图所示 加载进入缓存 登录之前部署的EC2客户端，上传这三个文件，跟上一步的三个csv文件放到一个目录下   导数据进Redis的脚本文件   rds_address.sh (990 )   rds_customer.sh (1 )   rds_product.sh (1 )    启动redis服务，安装unix2dos工具\nsudo amazon-linux-extras install redis4.0 -y sudo systemctl enable redis sudo systemctl start redis sudo yum install dos2unix -y 执行如下脚本导入数据到Redis（确保导入脚本和csv文件在同一个目录下）\ncd ~/csv sh rds_address.sh sh rds_customer.sh sh rds_product.sh 生成流式数据宽表  登录之前部署的EC2客户端，上传这个可执行文件（例如放到根目录下）   持续生成数据的lab4.sh文件   lab4.sh (3 )    执行脚本开始灌数据\ncd ~ sh lab4.sh kds-lab4 2020-09-05 \u0026amp; 检查lab4开头的日志文件输出，看是否运行正常，出现如下所示截图表示正常 表构建完毕后如下图所示  恭喜你，宽表构建完毕，可以开始在Elasticsearch里面开始接受数据并进行实时检索和可视化了。\n"
+},
+{
+	"uri": "/4-lab4/42-es.html",
+	"title": "42-实时检索和可视化",
+	"tags": [],
+	"description": "",
+	"content": " 要完成本章节的实验，大概需要10分钟。\n 本实验演示通过Kinesis Firehose 把流数据通过管道注入Elasticsearch实时检索和可视化的过程。\n导入数据  登录并打开Elasticsearch控制台，确保ES集群状态是有效，并复制对应的终端节点 此处的终端节点为\nvpc-lab-es-srugsr6gcfwjwtonv3exo2epmy.ap-southeast-1.es.amazonaws.com 打开Kinesis Firehose控制台，选择创建传输流，设置传输流名字“lab4-kfh”，并选择“kds-lab4”为源 下一步不对记录进行任何处理（选默认值），在下一步的目标里面选择将数据送到Elasticsearch，并选择我们部署的ES集群，以及数据的索引名（此处为lab4），如下图所示 需要配置S3转存储一份（或保留发送失败的记录），配置对应桶和路径即可 接下来的缓冲区设置为1M或者60秒即可（其他全部默认） 然后选择审核并创建传送流即可。\n登录ES集群并创建Index  传送流创建成功后，配置一个端口转发实现本地登录ES集群（此处需要用到刚才准备的终端节点地址和之前部署的EC2的IP地址），这其实是在我们的客户端跟ES集群之间通过之前部署的EC2构建了一个隧道，实现内网访问，如果各位习惯其他的构建内网方式（或者公司内部有构建跟AWS部署服务之间的VPN），都是可以的，只要能访问到即可\nsudo ssh -L 443:vpc-lab-es-srugsr6gcfwjwtonv3exo2epmy.ap-southeast-1.es.amazonaws.com:443 -i kp-sin.pem ec2-user@54.169.129.145 上述命令的结果是通过那个EC2在本地和ES集群的机器之间构建了一个隧道，城后即可使用如下地址打开Kibana集群\nhttps://localhost/_plugin/kibana/ 注意：如果是Windows客户端，请参考如下文档做端口转发\nhttps://www.jianshu.com/p/675c3bcba28c 登录Elasticsearch集群后，选择创建索引 系统已经发现了Index为lab4的相关数据，我们直接输入lab4即可（注意：如果此处看不到数据，请略微等待，如果长时间等待依然没有数据，请确认Kinesis Firehose的配置是否准确） 接下来选择tuptime为时间戳即可 通过选择对应字段，我们即可看到对应数据 按时间维度查看  接下来我们来创建第一个可视化图表（按时间维度查看销售额），首先创建一个视图 类型选择 Vertical Bar 类型选择 数据源 在Y-axis界面，aggregation下拉框选择sum，field选择 total，并备注为总销售额 在Buckets界面，点击add，选择X-axis Aggregation选择Date Histogram，Field选择 tuptime，Minimum选择默认值 Auto（因为我们输入数据时间较短，所以难以形成例如以天为单位的汇总数据） 点击更新后获得如下图表，选择左上角的保存 设置保存名称：time_revenue。注意：图表的时间线，可以根据要求在右上角位置进行修改。 按区域维度查看  这一次我们选择表格的方式（取销售额排名前10的城市，选择表格的形式） 配置指标数据为 total 列的和 再点击add，创建split slices，Sub-aggregation 选择terms，fields选择acity.keyword，单击更新按钮 获得的Top 10城市销售金额表（注意：因为流数据一直在注入，所以数据会变），如下图所示 然后点击左上角的“save”按钮进行保存，输入图表的名称time_city\n按产品维度查看  我们选择用饼图的方式来按产品维度查看 配置指标数据为 total 列的和 结合产品分类 并且配置显示标签（如果未显示标签就只有图，选中了标签以后会显示对应的备注和数据） 获得如下图所示的饼图（显示Top销量的产品分类，以及其他的汇总） 保存成：time_pclass\n创建仪表盘  在上述章节的实验过程中，我们创建了3个可视化报表 这个章节，我们把刚才创建的图表做成仪表盘。点击左侧按钮，创建Dashboard，点击“create new dashboard”，点击add按钮，把刚才的三个图表添加进来 添加已经创建好的各个图表（并保存仪表盘，此处为MyLab4），效果如下 可以根据选择右上角不同的时间区间获得不同的实时统计结果，各位熟悉Elasticsearch的学员可以按照自己喜欢的方式在ES里面构建各种图表。\n 恭喜你，已经完成本套动手实验的最后一个（Lab4）。本着节俭的原则，请在动手实验结束后清除我们部署出来的环境。\n"
+},
+{
+	"uri": "/about.html",
+	"title": "关于我们",
+	"tags": [],
+	"description": "",
+	"content": " 警告：本站所有技术文章和截图，仅供读者作为学习参考资料，严禁用于违法犯罪活动，否则产生的一切后果由读者自行承担，本站和所有作者均不承担任何法律及连带责任！\n   作者： Weiqiong Chen, Robin Long 更新： 2022/04/01  "
+},
+{
+	"uri": "/tags/athena.html",
+	"title": "Athena",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "/categories.html",
+	"title": "Categories",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "/tags/elasticsearch.html",
+	"title": "Elasticsearch",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "/tags/etl.html",
+	"title": "ETL",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "/tags/glue.html",
+	"title": "Glue",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "/tags/kinesis.html",
+	"title": "Kinesis",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "/tags/quicksight.html",
+	"title": "Quicksight",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "/tags.html",
+	"title": "Tags",
+	"tags": [],
+	"description": "",
+	"content": ""
+}]

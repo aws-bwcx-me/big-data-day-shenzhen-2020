@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="cn" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.74.3" />
+    <meta name="description" content="AWS Technical Event">
+<meta name="author" content="Weiqiong Chen/Robin Long">
+
+    <link rel="icon" href="../images/favicon.ico" type="image/png">
+
+    <title>Athena :: AWS Big Data Day</title>
+
+    
+    <link href="../css/nucleus.css?1649507867" rel="stylesheet">
+    <link href="../css/fontawesome-all.min.css?1649507867" rel="stylesheet">
+    <link href="../css/hybrid.css?1649507867" rel="stylesheet">
+    <link href="../css/featherlight.min.css?1649507867" rel="stylesheet">
+    <link href="../css/perfect-scrollbar.min.css?1649507867" rel="stylesheet">
+    <link href="../css/auto-complete.css?1649507867" rel="stylesheet">
+    <link href="../css/atom-one-dark-reasonable.css?1649507867" rel="stylesheet">
+    <link href="../css/theme.css?1649507867" rel="stylesheet">
+    <link href="../css/tabs.css?1649507867" rel="stylesheet">
+    <link href="../css/hugo-theme.css?1649507867" rel="stylesheet">
+    
+    <link href="../css/theme-aws.css?1649507867" rel="stylesheet">
+    
+    
+
+    <script src="../js/jquery-3.3.1.min.js?1649507867"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="../tags/athena.html">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <div>
+   <a href="../" title="Go Index">
+       <img style="vertical-align:middle" src="../images/logo.png" height="70px" />
+   </a>
+ </div>
+ 
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="../js/lunr.min.js?1649507867"></script>
+<script type="text/javascript" src="../js/auto-complete.js?1649507867"></script>
+<script type="text/javascript">
+    
+        var baseurl = "";
+    
+</script>
+<script type="text/javascript" src="../js/search.js?1649507867"></script>
+
+    
+  </div>
+  
+    <section id="homelinks">
+      <ul>
+        <li>
+            <a class="padding" href='../'><i class='fas fa-home'></i> Home</a>
+        </li>
+      </ul>
+    </section>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/0-prepare.html" title="0-实验准备" class="dd-item
+        
+        
+        
+        ">
+      <a href="../0-prepare.html">
+          <b> </b>0-实验准备
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/01-iam.html" title="01-账号配置" class="dd-item ">
+        <a href="../0-prepare/01-iam.html">
+        <b> </b>01-账号配置
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/02-ec2.html" title="02-部署EC2" class="dd-item ">
+        <a href="../0-prepare/02-ec2.html">
+        <b> </b>02-部署EC2
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/03-kds.html" title="03-配置KDS" class="dd-item ">
+        <a href="../0-prepare/03-kds.html">
+        <b> </b>03-配置KDS
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/04-rds.html" title="04-部署RDS" class="dd-item ">
+        <a href="../0-prepare/04-rds.html">
+        <b> </b>04-部署RDS
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/05-emr.html" title="05-部署EMR" class="dd-item ">
+        <a href="../0-prepare/05-emr.html">
+        <b> </b>05-部署EMR
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/06-es.html" title="06-部署Elasticsearch" class="dd-item ">
+        <a href="../0-prepare/06-es.html">
+        <b> </b>06-部署Elasticsearch
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-lab1.html" title="1-Lab1(流数据处理)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../1-lab1.html">
+          <b> </b>1-Lab1(流数据处理)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/1-lab1/11-kds.html" title="11-Kinesis流数据产生" class="dd-item ">
+        <a href="../1-lab1/11-kds.html">
+        <b> </b>11-Kinesis流数据产生
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/1-lab1/12-kas.html" title="12-Kinesis流数据分析" class="dd-item ">
+        <a href="../1-lab1/12-kas.html">
+        <b> </b>12-Kinesis流数据分析
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-lab2.html" title="2-Lab2(批量数据处理)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../2-lab2.html">
+          <b> </b>2-Lab2(批量数据处理)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/2-lab2/21-etl.html" title="21-数据处理（ETL）" class="dd-item ">
+        <a href="../2-lab2/21-etl.html">
+        <b> </b>21-数据处理（ETL）
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/2-lab2/22-emr.html" title="22-数据分析（EMR）" class="dd-item ">
+        <a href="../2-lab2/22-emr.html">
+        <b> </b>22-数据分析（EMR）
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-lab3.html" title="3-Lab3(数据可视化)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../3-lab3.html">
+          <b> </b>3-Lab3(数据可视化)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/3-lab3/31-athena.html" title="31-构建数据表" class="dd-item ">
+        <a href="../3-lab3/31-athena.html">
+        <b> </b>31-构建数据表
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/3-lab3/32-quicksight.html" title="32-数据可视化" class="dd-item ">
+        <a href="../3-lab3/32-quicksight.html">
+        <b> </b>32-数据可视化
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-lab4.html" title="4-Lab4(数据实时检索)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../4-lab4.html">
+          <b> </b>4-Lab4(数据实时检索)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/4-lab4/41-widtable.html" title="41-构建宽表" class="dd-item ">
+        <a href="../4-lab4/41-widtable.html">
+        <b> </b>41-构建宽表
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/4-lab4/42-es.html" title="42-实时检索和可视化" class="dd-item ">
+        <a href="../4-lab4/42-es.html">
+        <b> </b>42-实时检索和可视化
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-cleanup.html" title="5-环境清理" class="dd-item
+        
+        
+        
+        ">
+      <a href="../5-cleanup.html">
+          <b> </b>5-环境清理
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/about.html" title="关于我们" class="dd-item
+        
+        
+        
+        ">
+      <a href="../about.html">
+          关于我们
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> </a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <left>
+	<h5 class="copyright">CopyRight: &copy; 2022 bwcx.me.
+		<BR>Author: Weiqiong Chen/Robin Long
+		<BR>Update: 2022-04
+	<h5>
+</left>
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='../'>Bigdata-Day</a> > <a href='../tags.html'>Tags</a> > Athena
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+                tag ::
+              
+              Athena
+            </h1>
+          
+
+        
+
+
+
+
+
+<ul>
+	
+		<li><a href="../3-lab3.html">3-Lab3(数据可视化)</a></li>
+	
+</ul>
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+		
+		
+			<a class="nav nav-next" href="../0-prepare.html" title="0-实验准备" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="../js/clipboard.min.js?1649507867"></script>
+    <script src="../js/perfect-scrollbar.min.js?1649507867"></script>
+    <script src="../js/perfect-scrollbar.jquery.min.js?1649507867"></script>
+    <script src="../js/jquery.sticky.js?1649507867"></script>
+    <script src="../js/featherlight.min.js?1649507867"></script>
+    <script src="../js/highlight.pack.js?1649507867"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="../js/modernizr.custom-3.6.0.js?1649507867"></script>
+    <script src="../js/learn.js?1649507867"></script>
+    <script src="../js/hugo-learn.js?1649507867"></script>
+    
+        
+            <script src="../mermaid/mermaid.js?1649507867"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
+</html>

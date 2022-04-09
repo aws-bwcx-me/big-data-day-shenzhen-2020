@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kinesis on AWS Big Data Day</title>
+    <link>/tags/kinesis.html</link>
+    <description>Recent content in Kinesis on AWS Big Data Day</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    
+	<atom:link href="/tags/kinesis/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>1-Lab1(流数据处理)</title>
+      <link>/1-lab1.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/1-lab1.html</guid>
+      <description>完成本节实验大概需要30分钟。
+ 为了使练习更加贴近实际业务场景，我们将模拟从应用程序中生成交易订单事件，在这种情况下是与交易流水、交易日期、客户编号、产品编号和一些数据相对应的事件流。在此教程中，将完成以下三个步骤的实验：
+•	创建Amazon Kinesis Data Stream
+•	创建Amazon Kinesis Data Analytics 应用程序
+•	创建Amazon Kinesis Data Firehose将数据传送到Amazon S3（Lab2和Lab3需要用到）
+上述三个步骤的实验的架构图如下
+文档和版权信息
+ 本章作者： Xiangquan Liu
+文档版权： 未经许可，亦可转载。</description>
+    </item>
+    
+    <item>
+      <title>4-Lab4(数据实时检索)</title>
+      <link>/4-lab4.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/4-lab4.html</guid>
+      <description>完成本节实验大概需要30分钟。
+ 在本练习中，您将学习如何使用Amazon Kinesis流式传输数据到Elasticsearch并进行分析，这是两项完全托管的基于云的服务，用于实时传输大型分布式数据流和查询，分析等。
+为了使练习更加贴近实际业务场景，我们将模拟从EC2的应用程序中生成交易订单事件。
+在此教程中，您将完成以下三个组件的实验：
+ 创建Amazon Kinesis Data Stream 创建Amazon Kinesis Data Firehose 部署Amazon Elasticsearch  本实验的架构图如下 文档和版权信息
+ 本章作者： Yingfeng Li
+文档版权： 未经许可，亦可转载。</description>
+    </item>
+    
+  </channel>
+</rss>

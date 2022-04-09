@@ -1,0 +1,58 @@
+import sys
+from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext
+from awsglue.context import GlueContext
+from awsglue.job import Job
+
+## @params: [JOB_NAME]
+args = getResolvedOptions(sys.argv, ['JOB_NAME'])
+
+
+sc = SparkContext()
+glueContext = GlueContext(sc)
+spark = glueContext.spark_session
+job = Job(glueContext)
+job.init(args['JOB_NAME'], args)
+## @type: DataSource
+## @return: datasource
+## @inputs: []
+datasource1 = glueContext.create_dynamic_frame.from_catalog(database = "default", table_name = "rds_bdd_tbl_customer", transformation_ctx = "datasource1")
+datasource2 = glueContext.create_dynamic_frame.from_catalog(database = "default", table_name = "rds_bdd_tbl_product", transformation_ctx = "datasource2")
+datasource3 = glueContext.create_dynamic_frame.from_catalog(database = "default", table_name = "rds_bdd_tbl_address", transformation_ctx = "datasource3")
+datasource4 = glueContext.create_dynamic_frame.from_catalog(database = "default", table_name = "rds_bdd_tbl_transaction", transformation_ctx = "datasource4")
+datasource5 = glueContext.create_dynamic_frame.from_catalog(database = "default", table_name = "kds_lab1_input", transformation_ctx = "datasource5")
+## @type: ApplyMapping
+## @return: applymapping
+## @inputs: [frame = datasource]
+applymapping1 = ApplyMapping.apply(frame = datasource1, mappings = [("uid", "long", "uid", "long"), ("uname", "string", "uname", "string"), ("umobile", "string", "umobile", "string"), ("uno", "string", "uno", "string"), ("uuptime", "timestamp", "uuptime", "timestamp"), ("ano", "string", "ano", "string")], transformation_ctx = "applymapping1")
+applymapping2 = ApplyMapping.apply(frame = datasource2, mappings = [("pno", "string", "pno", "string"), ("pname", "string", "pname", "string"), ("pprice", "decimal(10,2)", "pprice", "decimal(10,2)"), ("puptime", "timestamp", "puptime", "timestamp"), ("pid", "long", "pid", "long"), ("pclass", "string", "pclass", "string")], transformation_ctx = "applymapping2")
+applymapping3 = ApplyMapping.apply(frame = datasource3, mappings = [("ano", "string", "ano", "string"), ("aname", "string", "aname", "string"), ("acity", "string", "acity", "string"), ("aid", "long", "aid", "long"), ("auptime", "timestamp", "auptime", "timestamp")], transformation_ctx = "applymapping3")
+applymapping4 = ApplyMapping.apply(frame = datasource4, mappings = [("uno", "string", "uno", "string"), ("tdate", "string", "tdate", "string"), ("tno", "string", "tno", "string"), ("tnum", "int", "tnum", "int"), ("tuptime", "timestamp", "tuptime", "timestamp"), ("pno", "string", "pno", "string"), ("tid", "long", "tid", "long")], transformation_ctx = "applymapping4")
+applymapping5 = ApplyMapping.apply(frame = datasource5, mappings = [("uno", "string", "uno", "string"), ("tdate", "string", "tdate", "string"), ("tno", "string", "tno", "string"), ("tnum", "int", "tnum", "int"),("tuptime", "string", "tuptime", "timestamp"), ("pno", "string", "pno", "string"), ("tid", "string", "tid", "long")], transformation_ctx = "applymapping5")
+## @type: ResolveChoice
+## @return: resolvechoice
+## @inputs: [frame = applymapping]
+resolvechoice1 = ResolveChoice.apply(frame = applymapping1, choice = "make_struct", transformation_ctx = "resolvechoice1")
+resolvechoice2 = ResolveChoice.apply(frame = applymapping2, choice = "make_struct", transformation_ctx = "resolvechoice2")
+resolvechoice3 = ResolveChoice.apply(frame = applymapping3, choice = "make_struct", transformation_ctx = "resolvechoice3")
+resolvechoice4 = ResolveChoice.apply(frame = applymapping4, choice = "make_struct", transformation_ctx = "resolvechoice4")
+resolvechoice5 = ResolveChoice.apply(frame = applymapping5, choice = "make_struct", transformation_ctx = "resolvechoice5")
+## @type: DropNullFields
+## @return: dropnullfields3
+## @inputs: [frame = resolvechoice]
+dropnullfields1 = DropNullFields.apply(frame = resolvechoice1, transformation_ctx = "dropnullfields1")
+dropnullfields2 = DropNullFields.apply(frame = resolvechoice2, transformation_ctx = "dropnullfields2")
+dropnullfields3 = DropNullFields.apply(frame = resolvechoice3, transformation_ctx = "dropnullfields3")
+dropnullfields4 = DropNullFields.apply(frame = resolvechoice4, transformation_ctx = "dropnullfields4")
+dropnullfields5 = DropNullFields.apply(frame = resolvechoice5, transformation_ctx = "dropnullfields5")
+## @type: DataSink
+## @return: datasink
+## @inputs: [frame = dropnullfields]
+datasink1 = glueContext.write_dynamic_frame.from_options(frame = dropnullfields1, connection_type = "s3", connection_options = {"path": "s3://lab-519201465192-sin-com/spark/input/tbl_customer"}, format = "parquet", transformation_ctx = "datasink1")
+datasink2 = glueContext.write_dynamic_frame.from_options(frame = dropnullfields2, connection_type = "s3", connection_options = {"path": "s3://lab-519201465192-sin-com/spark/input/tbl_product"}, format = "parquet", transformation_ctx = "datasink2")
+datasink3 = glueContext.write_dynamic_frame.from_options(frame = dropnullfields3, connection_type = "s3", connection_options = {"path": "s3://lab-519201465192-sin-com/spark/input/tbl_address"}, format = "parquet", transformation_ctx = "datasink3")
+datasink4 = glueContext.write_dynamic_frame.from_options(frame = dropnullfields4, connection_type = "s3", connection_options = {"path": "s3://lab-519201465192-sin-com/spark/input/tbl_transaction"}, format = "parquet", transformation_ctx = "datasink4")
+datasink5 = glueContext.write_dynamic_frame.from_options(frame = dropnullfields5, connection_type = "s3", connection_options = {"path": "s3://lab-519201465192-sin-com/spark/input/tbl_transaction"}, format = "parquet", transformation_ctx = "datasink5")
+job.commit()
+

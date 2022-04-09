@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>/</loc>
+  </url>
+  
+  <url>
+    <loc>/0-prepare.html</loc>
+  </url>
+  
+  <url>
+    <loc>/1-lab1.html</loc>
+  </url>
+  
+  <url>
+    <loc>/0-prepare/01-iam.html</loc>
+  </url>
+  
+  <url>
+    <loc>/0-prepare/02-ec2.html</loc>
+  </url>
+  
+  <url>
+    <loc>/0-prepare/03-kds.html</loc>
+  </url>
+  
+  <url>
+    <loc>/0-prepare/04-rds.html</loc>
+  </url>
+  
+  <url>
+    <loc>/0-prepare/05-emr.html</loc>
+  </url>
+  
+  <url>
+    <loc>/0-prepare/06-es.html</loc>
+  </url>
+  
+  <url>
+    <loc>/2-lab2.html</loc>
+  </url>
+  
+  <url>
+    <loc>/1-lab1/11-kds.html</loc>
+  </url>
+  
+  <url>
+    <loc>/1-lab1/12-kas.html</loc>
+  </url>
+  
+  <url>
+    <loc>/3-lab3.html</loc>
+  </url>
+  
+  <url>
+    <loc>/2-lab2/21-etl.html</loc>
+  </url>
+  
+  <url>
+    <loc>/2-lab2/22-emr.html</loc>
+  </url>
+  
+  <url>
+    <loc>/4-lab4.html</loc>
+  </url>
+  
+  <url>
+    <loc>/3-lab3/31-athena.html</loc>
+  </url>
+  
+  <url>
+    <loc>/3-lab3/32-quicksight.html</loc>
+  </url>
+  
+  <url>
+    <loc>/5-cleanup.html</loc>
+  </url>
+  
+  <url>
+    <loc>/4-lab4/41-widtable.html</loc>
+  </url>
+  
+  <url>
+    <loc>/4-lab4/42-es.html</loc>
+  </url>
+  
+  <url>
+    <loc>/about.html</loc>
+  </url>
+  
+  <url>
+    <loc>/tags/athena.html</loc>
+  </url>
+  
+  <url>
+    <loc>/categories.html</loc>
+  </url>
+  
+  <url>
+    <loc>/tags/elasticsearch.html</loc>
+  </url>
+  
+  <url>
+    <loc>/tags/etl.html</loc>
+  </url>
+  
+  <url>
+    <loc>/tags/glue.html</loc>
+  </url>
+  
+  <url>
+    <loc>/tags/kinesis.html</loc>
+  </url>
+  
+  <url>
+    <loc>/tags/quicksight.html</loc>
+  </url>
+  
+  <url>
+    <loc>/tags.html</loc>
+  </url>
+  
+</urlset>

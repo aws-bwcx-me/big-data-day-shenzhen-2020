@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2-Lab2(批量数据处理) on AWS Big Data Day</title>
+    <link>/2-lab2.html</link>
+    <description>Recent content in 2-Lab2(批量数据处理) on AWS Big Data Day</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    
+	<atom:link href="/2-lab2/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>21-数据处理（ETL）</title>
+      <link>/2-lab2/21-etl.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/2-lab2/21-etl.html</guid>
+      <description>要完成本章节的实验，大概需要40分钟。
+ 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。
+ 本实验演示数据处理的过程（ETL过程，此处我们使用AWS Glue服务），数据分析在下个章节。
+连接到RDS  登录并打开AWS Glue控制台（确认在AWS的新加坡区域），选择添加数据库连接： 设置连接名称（Lab2-Glue-RDS-connection）和类型 选择对应配置（请输入之前部署rds时admin的密码，此处为QazWsx2020） 审核并完成，然后开始连接测试，测试时需要使用第一步创建的role（这是在准备阶段创建的IAM角色 lab-role） 需要1-2分钟的时间，略微等待即可 爬取RDS元数据  创建名为my-lab2-crawler-rds的爬网程序 设置爬网程序名称 配置对应参数（包含路径那里输入：bdd/%） 选择对应的role 配置输出（点击添加数据库，名字为default即可） 完成后，运行爬网程序，爬取成功后，元数据目录中会出现4张RDS元数据表 爬取kinesis输出的元数据  创建名为my-lab2-crawler-kinesis的爬网程序 添加数据存储（此处选择Lab1的输出） 选择对应的role 配置输出 完成后，运行爬网程序，元数据目录中会出现1张Kinesis元数据表 合并rds和kinesis的数据输出到s3  此处需要一个作业处理脚本   Glue to S3 code   glue-to-s3.glue (5 )    把这个脚本上传到S3桶内，例如 创建ETL作业 配置作业属性 选择对应连接，然后选择“保存作业并编辑脚本” 确认表名和输出位置的桶名是否正确，参考下图（一定要确认爬虫爬取出来的表名和S3桶名字的正确性） 作业运行中（根据数据量不同，所需时间略有不同），考虑到Kinesis Data Streams在不停的打进来数据，所以每次跑EMR任务之前，这个都需要运行一次，否则数据就不是最新的，可以考虑按某个时间间隔（例如天）运行一次 作业运行完成后，可检查s3://lab-519201465192-sin-com/spark/input/目录下的&amp;quot;tbl_customer、tbl_product、tbl_address、tbl_transaction&amp;quot;文件夹中，是否产生对应的parquet格式的数据，以验证ETL作业是否执行成功。 爬取合并在S3上的输出的元数据  创建名为my-lab2-crawler-s3的爬网程序 配置存储的包含路径为前一个任务的输出地（此处为：s3://lab-519201465192-sin-com/spark/input） 配置IAM角色 配置输出 审核并确认完成。然后运行爬网程序，元数据目录中会出现4张input文件夹中数据的元数据表 现在我们合并了历史数据，有了不断输入的流数据（如果需要实时的流数据结果，需要运行一遍上面的作业），接下来就可以开始下一步的分析数据了。</description>
+    </item>
+    
+    <item>
+      <title>22-数据分析（EMR）</title>
+      <link>/2-lab2/22-emr.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/2-lab2/22-emr.html</guid>
+      <description>要完成本章节的实验，大概需要20分钟。
+ 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。
+ 本实验演示数据分析的过程（Spark），数据处理（ETL）在上个章节。
+登录EMR Master  如果按照实验准备的环节部署的EMR集群，是可以直接远程登录Master节点的，不过需要放开Master节点的22端口。
+打开控制台关于安全组的页面（可以从VPC控制台或者EC2控制台进入），修改Master相关的安全组（此处为：sg-06cc1d3bc1ff83213 - ElasticMapReduce-master），编辑它的入站规则，添加22端口许可，然后保存即可（其他的不要动） 确认EMR集群状态时绿色状态，点击“Connect to the Master Node Using SSH” 出来一个弹窗，显示如何连接Master节点（使用之前创建的密钥以及hadoop用户登录）
+ssh -i kp-sin.pem hadoop@ec2-54-169-47-78.ap-southeast-1.compute.amazonaws.com 登录后如下图所示 提交任务  提交任务的方式有两种，一种是spark-shell的方式，一种是spark-submit的方式。
+用spark-shell提交 登录Master节点后，输入spark-shell命令，启动spark-shell环境，使用如下代码生成聚合数据集（注意检查表名称必须一致，且复制的时候别出现换行的问题&amp;ndash;这个在windows下的记事本最容易出现）
+val result = spark.sql(&amp;quot;SELECT tt.tno tno, tt.tdate tdate, tt.uno uno, tt.pno pno, tt.tnum tnum, tc.uname uname, tc.umobile umobile, ta.ano ano, ta.acity acity, ta.aname aname, tp.pclass pclass, tp.pname pname, tp.pprice price FROM s3_tbl_transaction tt, s3_tbl_customer tc, s3_tbl_address ta, s3_tbl_product tp WHERE tp.</description>
+    </item>
+    
+  </channel>
+</rss>

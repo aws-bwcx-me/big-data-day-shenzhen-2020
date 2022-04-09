@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on AWS Big Data Day</title>
+    <link>/tags.html</link>
+    <description>Recent content in Tags on AWS Big Data Day</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    
+	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Athena</title>
+      <link>/tags/athena.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/athena.html</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Elasticsearch</title>
+      <link>/tags/elasticsearch.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/elasticsearch.html</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ETL</title>
+      <link>/tags/etl.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/etl.html</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Glue</title>
+      <link>/tags/glue.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/glue.html</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Kinesis</title>
+      <link>/tags/kinesis.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/kinesis.html</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Quicksight</title>
+      <link>/tags/quicksight.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/quicksight.html</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

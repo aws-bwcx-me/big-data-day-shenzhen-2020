@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>1-Lab1(流数据处理) on AWS Big Data Day</title>
+    <link>/1-lab1.html</link>
+    <description>Recent content in 1-Lab1(流数据处理) on AWS Big Data Day</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    
+	<atom:link href="/1-lab1/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>11-Kinesis流数据产生</title>
+      <link>/1-lab1/11-kds.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/1-lab1/11-kds.html</guid>
+      <description>要完成本章节的实验，大概需要10分钟。
+ 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。
+ 本实验模拟产生流数据。
+发送模拟数据  登录准备阶段部署的EC2，保存如下代码到ec2-user的home目录下   lab1.sh   lab1.sh (1 )    然后执行如下代码开始给Kinesis Data Streams流平台发送模拟数据（这个2020-09-04在系统内是个交易日期，方便后续作为关键字查找，没有特殊的含义）
+cd ~ sh lab1.sh kds-lab1 2020-09-04 &amp;amp; 系统会生成一个日志文件，查看同一个目录下的日志文件，出现如下字样表示启动成功 准备S3存储桶  点击控制台右上角的账号下拉框，可以看到对应的账号，如 此处为
+519201465192 因为S3桶是全球唯一的命名，所以为了区分，我们采用如下的方式命名S3存储桶，如下所示
+lab-519201465192-sin-com 打开EC2客户端，使用如下命令创建S3桶（也可以直接在控制台创建，此处略）
+aws s3 mb s3://lab-519201465192-sin-com/ aws s3 ls 如下 我们会发现有两个S3的存储桶（因为有一个是之前部署EMR集群的时候的日志桶）。
+创建S3终端节点  为了方便内网访问S3存储桶，此处我们配置S3终端节点。登录并打开VPC控制台，往下拉选择左边的终端节点： 选中S3（在搜索框里面输入s3并回车即可搜索），选择对应VPC（此处我们只有一个默认VPC）和路由表： 其他默认，点击“创建终端节点”即可。</description>
+    </item>
+    
+    <item>
+      <title>12-Kinesis流数据分析</title>
+      <link>/1-lab1/12-kas.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/1-lab1/12-kas.html</guid>
+      <description>要完成本章节的实验，大概需要20分钟。
+ 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。
+ 本实验演示配置数据流管道（为Lab2/3准备），并实时对流数据进行在线分析等。
+配置Kinesis Data Firehose  KFH（Kinesis Data Firehose）是提供实时交付的完全托管服务，可以把流数据发往诸如 Amazon Simple Storage Service （Amazon S3)， Amazon Redshift， Amazon Elasticsearch Service （Amazon ES)、Splunk以及支持的第三方服务提供商（包括DatAdog、MongoDB和NewRelic）拥有的任何自定义HTTP端点或HTTP端点。
+打开Kinesis管理控制台（确保当前的区域选择是新加坡），在左侧菜单栏选择传输流，在界面上点击“创建传输流” 输入传输流的名字（此处为 lab1-kfh），并选择准备过程中创建的Kinesis数据流（此处为kds-lab1），然后点击下一步 第二步处理记录选择默认，第三步目标我们选择S3，并选择之前创建的存储桶（此处为：lab-519201465192-sin-com） 然后在S3前缀和后缀分配输入名字lab1-input/和lab1-error/，如下 配置缓冲的时候，设置为“1”M和“60”秒，其他默认，点击下一步，然后审核并点击“创建传送流” 大概过1分钟左右，就可以在S3存储桶里面看到对应的数据输出。
+配置Kinesis Data Analytics  打开Kinesis管理控制台（确保当前的区域选择是新加坡），在左侧菜单栏选择“分析应用程序”，在界面上点击“创建应用程序”，然后输入名字（此处为kas-lab1）和运行时（SQL）即可 创建成功后，选择连接数据流（连接到之前准备阶段创建的kds数据流，此处为kds-lab1，已经通过脚本在送数据了） 然后点击左下角的发现架构，开始获取元数据 发现后的架构和数据格式跟我们预期的一致，所以此处不做更改，直接保存即可 接下来我们选择用SQL做实时分析 确认启动它 然后使用如下SQL代码，保存并运行（我们此处演示按1分钟聚合，如果有其他聚合时间要求，可以修改最下面的60这个数字即可）
+CREATE OR REPLACE STREAM &amp;#34;DESTINATION_SQL_STREAM&amp;#34; (count_tno integer,sum_tnum integer); CREATE OR REPLACE PUMP &amp;#34;STREAM_PUMP&amp;#34; AS INSERT INTO &amp;#34;DESTINATION_SQL_STREAM&amp;#34; SELECT STREAM count(*), sum(&amp;#34;tnum&amp;#34;) FROM &amp;#34;SOURCE_SQL_STREAM_001&amp;#34; GROUP BY FLOOR((&amp;#34;SOURCE_SQL_STREAM_001&amp;#34;.ROWTIME - TIMESTAMP &amp;#39;1970-01-01 00:00:00&amp;#39;) SECOND / 60 TO SECOND); 略微等待一小段时间，我们即可看到运行结果，如下所示（和我们的代码预期一致，一分钟一次聚合） 可以在目标页面把查询结果输出到别的地方，例如别的流，别的S3存储桶等用于业务用途，此处不做演示。</description>
+    </item>
+    
+  </channel>
+</rss>

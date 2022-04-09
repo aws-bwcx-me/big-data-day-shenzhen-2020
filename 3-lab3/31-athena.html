@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="cn" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.74.3" />
+    <meta name="description" content="AWS Technical Event">
+<meta name="author" content="Weiqiong Chen/Robin Long">
+
+    <link rel="icon" href="../images/favicon.ico" type="image/png">
+
+    <title>31-构建数据表 :: AWS Big Data Day</title>
+
+    
+    <link href="../css/nucleus.css?1649507867" rel="stylesheet">
+    <link href="../css/fontawesome-all.min.css?1649507867" rel="stylesheet">
+    <link href="../css/hybrid.css?1649507867" rel="stylesheet">
+    <link href="../css/featherlight.min.css?1649507867" rel="stylesheet">
+    <link href="../css/perfect-scrollbar.min.css?1649507867" rel="stylesheet">
+    <link href="../css/auto-complete.css?1649507867" rel="stylesheet">
+    <link href="../css/atom-one-dark-reasonable.css?1649507867" rel="stylesheet">
+    <link href="../css/theme.css?1649507867" rel="stylesheet">
+    <link href="../css/tabs.css?1649507867" rel="stylesheet">
+    <link href="../css/hugo-theme.css?1649507867" rel="stylesheet">
+    
+    <link href="../css/theme-aws.css?1649507867" rel="stylesheet">
+    
+    
+
+    <script src="../js/jquery-3.3.1.min.js?1649507867"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="../3-lab3/31-athena.html">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <div>
+   <a href="../" title="Go Index">
+       <img style="vertical-align:middle" src="../images/logo.png" height="70px" />
+   </a>
+ </div>
+ 
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="../js/lunr.min.js?1649507867"></script>
+<script type="text/javascript" src="../js/auto-complete.js?1649507867"></script>
+<script type="text/javascript">
+    
+        var baseurl = "";
+    
+</script>
+<script type="text/javascript" src="../js/search.js?1649507867"></script>
+
+    
+  </div>
+  
+    <section id="homelinks">
+      <ul>
+        <li>
+            <a class="padding" href='../'><i class='fas fa-home'></i> Home</a>
+        </li>
+      </ul>
+    </section>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/0-prepare.html" title="0-实验准备" class="dd-item
+        
+        
+        
+        ">
+      <a href="../0-prepare.html">
+          <b> </b>0-实验准备
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/01-iam.html" title="01-账号配置" class="dd-item ">
+        <a href="../0-prepare/01-iam.html">
+        <b> </b>01-账号配置
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/02-ec2.html" title="02-部署EC2" class="dd-item ">
+        <a href="../0-prepare/02-ec2.html">
+        <b> </b>02-部署EC2
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/03-kds.html" title="03-配置KDS" class="dd-item ">
+        <a href="../0-prepare/03-kds.html">
+        <b> </b>03-配置KDS
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/04-rds.html" title="04-部署RDS" class="dd-item ">
+        <a href="../0-prepare/04-rds.html">
+        <b> </b>04-部署RDS
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/05-emr.html" title="05-部署EMR" class="dd-item ">
+        <a href="../0-prepare/05-emr.html">
+        <b> </b>05-部署EMR
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/06-es.html" title="06-部署Elasticsearch" class="dd-item ">
+        <a href="../0-prepare/06-es.html">
+        <b> </b>06-部署Elasticsearch
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-lab1.html" title="1-Lab1(流数据处理)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../1-lab1.html">
+          <b> </b>1-Lab1(流数据处理)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/1-lab1/11-kds.html" title="11-Kinesis流数据产生" class="dd-item ">
+        <a href="../1-lab1/11-kds.html">
+        <b> </b>11-Kinesis流数据产生
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/1-lab1/12-kas.html" title="12-Kinesis流数据分析" class="dd-item ">
+        <a href="../1-lab1/12-kas.html">
+        <b> </b>12-Kinesis流数据分析
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-lab2.html" title="2-Lab2(批量数据处理)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../2-lab2.html">
+          <b> </b>2-Lab2(批量数据处理)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/2-lab2/21-etl.html" title="21-数据处理（ETL）" class="dd-item ">
+        <a href="../2-lab2/21-etl.html">
+        <b> </b>21-数据处理（ETL）
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/2-lab2/22-emr.html" title="22-数据分析（EMR）" class="dd-item ">
+        <a href="../2-lab2/22-emr.html">
+        <b> </b>22-数据分析（EMR）
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-lab3.html" title="3-Lab3(数据可视化)" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="../3-lab3.html">
+          <b> </b>3-Lab3(数据可视化)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/3-lab3/31-athena.html" title="31-构建数据表" class="dd-item active">
+        <a href="../3-lab3/31-athena.html">
+        <b> </b>31-构建数据表
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/3-lab3/32-quicksight.html" title="32-数据可视化" class="dd-item ">
+        <a href="../3-lab3/32-quicksight.html">
+        <b> </b>32-数据可视化
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-lab4.html" title="4-Lab4(数据实时检索)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../4-lab4.html">
+          <b> </b>4-Lab4(数据实时检索)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/4-lab4/41-widtable.html" title="41-构建宽表" class="dd-item ">
+        <a href="../4-lab4/41-widtable.html">
+        <b> </b>41-构建宽表
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/4-lab4/42-es.html" title="42-实时检索和可视化" class="dd-item ">
+        <a href="../4-lab4/42-es.html">
+        <b> </b>42-实时检索和可视化
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-cleanup.html" title="5-环境清理" class="dd-item
+        
+        
+        
+        ">
+      <a href="../5-cleanup.html">
+          <b> </b>5-环境清理
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/about.html" title="关于我们" class="dd-item
+        
+        
+        
+        ">
+      <a href="../about.html">
+          关于我们
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> </a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <left>
+	<h5 class="copyright">CopyRight: &copy; 2022 bwcx.me.
+		<BR>Author: Weiqiong Chen/Robin Long
+		<BR>Update: 2022-04
+	<h5>
+</left>
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='../'>Bigdata-Day</a> > <a href='../3-lab3.html'>3-Lab3(数据可视化)</a> > 31-构建数据表
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#准备数据库和表">准备数据库和表</a></li>
+    <li><a href="#构建表">构建表</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              31-构建数据表
+            </h1>
+          
+
+        
+
+
+<hr>
+
+<div class="notices tip" ><p>要完成本章节的实验，大概需要10分钟。</p>
+</div>
+
+
+<div class="notices info" ><p>如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。</p>
+</div>
+
+<p>本实验演示通过Athena和Glue构建数据表的过程。</p>
+<h2 id="准备数据库和表">准备数据库和表</h2>
+<hr>
+<p>登录并打开Glue控制台，点击左侧菜单栏“数据库”
+<img src="../images/3/glue-1.png" alt=""></p>
+<p>点击“添加数据库”按钮，名称为：<code>athenadb</code>
+<img src="../images/3/glue-2.png" alt=""></p>
+<p>创建完毕后，点击athenadb数据库，并选择“athenadb中的表”
+<img src="../images/3/glue-3.png" alt=""></p>
+<p>点击“使用爬网程序添加表”，名称为<code>athenadbcrawler</code>
+<img src="../images/3/glue-4.png" alt=""></p>
+<p>在“包含路径”里面，选择Lab2的EMR输出目录
+<img src="../images/3/glue-5.png" alt=""></p>
+<p>选择对应IAM Role
+<img src="../images/3/glue-6.png" alt=""></p>
+<p>选择数据库“athenadb”，添加表前缀：<code>athena_</code>,点击下一步
+<img src="../images/3/glue-7.png" alt=""></p>
+<p>点击完成后运行爬网程序，点击“表”查看 确认，<code>athena_output</code>已经在里面（如果上一个实验的设置不一样，那么也许这个名字略微有点区别）
+<img src="../images/3/glue-8.png" alt=""></p>
+<h2 id="构建表">构建表</h2>
+<hr>
+<p>登录并进入Athena控制台，在左侧菜单，选择AwsDataCatalog，在Database选择athenadb，可以看到athena_output表
+<img src="../images/3/athena-1.png" alt=""></p>
+<p>在右上角的“设置”里面配置好查询结果路径到S3的目录，建议在bucket里面建目录athena-result
+<img src="../images/3/athena-2.png" alt=""></p>
+<p>执行SQL语句</p>
+<pre><code>SELECT * FROM athena_output limit 10
+</code></pre><p>如果“运行查询”的按钮是灰色的，可以直接使用 Ctrl + Enter 运行查询，然后很快就可以看到实时查询结果
+<img src="../images/3/athena-3.png" alt=""></p>
+<p>使用如下sql构建按日期的销售额（为了防止数据不均衡导致图比例尺严重失调，我们去掉了流数据的日期的交易额，此处为<code>2020-09-04</code>）</p>
+<pre><code>SELECT sum(price*tnum) AS total_revenue,
+         tdate
+FROM athena_output
+WHERE tdate&lt;&gt;'2020-09-04'
+GROUP BY  tdate;
+</code></pre><p>把他保存成表
+<img src="../images/3/athena-4.png" alt=""></p>
+<p>名称是：<code>revenue_day_view</code>
+<img src="../images/3/athena-5.png" alt=""></p>
+<p>用如下sql查询并保存成表：<code>revenue_pclass_view</code>，过程略</p>
+<pre><code>SELECT sum(price*tnum) AS total_revenue,
+        pclass
+FROM athena_output
+GROUP BY  pclass;
+</code></pre><p>用如下sql查询并保存成表：<code>revenue_city_view</code>，过程略</p>
+<pre><code>SELECT sum(price*tnum) AS total_revenue,
+        acity
+FROM athena_output
+GROUP BY  acity;
+</code></pre><p>表构建完毕后如下图所示
+<img src="../images/3/athena-6.png" alt=""></p>
+<hr>
+<p>恭喜你，表构建完毕，可以开始可视化了。</p>
+
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="../3-lab3.html" title="3-Lab3(数据可视化)"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="../3-lab3/32-quicksight.html" title="32-数据可视化" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="../js/clipboard.min.js?1649507867"></script>
+    <script src="../js/perfect-scrollbar.min.js?1649507867"></script>
+    <script src="../js/perfect-scrollbar.jquery.min.js?1649507867"></script>
+    <script src="../js/jquery.sticky.js?1649507867"></script>
+    <script src="../js/featherlight.min.js?1649507867"></script>
+    <script src="../js/highlight.pack.js?1649507867"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="../js/modernizr.custom-3.6.0.js?1649507867"></script>
+    <script src="../js/learn.js?1649507867"></script>
+    <script src="../js/hugo-learn.js?1649507867"></script>
+    
+        
+            <script src="../mermaid/mermaid.js?1649507867"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
+</html>
+

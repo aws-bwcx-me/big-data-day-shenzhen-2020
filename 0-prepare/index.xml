@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>0-实验准备 on AWS Big Data Day</title>
+    <link>/0-prepare.html</link>
+    <description>Recent content in 0-实验准备 on AWS Big Data Day</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    
+	<atom:link href="/0-prepare/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>01-账号配置</title>
+      <link>/0-prepare/01-iam.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/0-prepare/01-iam.html</guid>
+      <description>如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。
+ 本章节我们配置和安全相关的内容（账号，权限等）。
+获取AWS账号（登录控制台用）  如果已经有AWS的控制台登录账号，用接下来的这个 URL 直接登录即可，可以略过获取账号这部分（但是建议有对应管理权限），需要注意的是我们演示的环境为AWS的新加坡区域，如果学员使用的是国内的区域，则略有区别，仅供参考。
+AWS控制台地址
+https://console.aws.amazon.com/console/home 如果是参加现场实验的学员，你会获得一个现场指导老师发给你的 hash 码，类似这样的
+4b8b-0bd9571f14-c4 可以通过如下方式登录实验环境（请自动替换你拿到的 hash 码）
+https://dashboard.eventengine.run/login?hash=4b8b-0bd9571f14-c4 通过这个地址登录AWS控制台（第一次需要接受系统协议的提醒） 选择登录控制台 点击“Open AWS Console”直接打开控制台（不需要输入用户密码这些，默认具备管理员权限），请注意绿色方框的 Region 是否正是ap-southesat-1（对应新加坡区域） 其他未提醒的内容不用关注，后面需要用到会有提醒的。
+添加用户（为了获取AKSK）  IAM（Identity and Access Management）是AWS和用户，权限以及认证等安全相关的服务，此处我们主要配置一个只能编程使用的用户（此处为获取对应的aksk，因为市场活动默认的 Hash 码的登录用户不能自己给自己创建 aksk），一个授权的角色（Role）。
+通过如下方式打开IAM控制台 点击左边的“用户”菜单，然后选择“添加用户” 设置用户名（例如此处为cliuser，只选择“编程访问”（获取一对aksk），然后选择“下一步：权限” 在设置权限的页面，点击“直接附加现有策略”，添加 AdministratorAccess 和 IAMFullAccess 两个 下一步标签页面可以不配置，接着下一步审核页面，确认策略已经正确添加 用户创建成功后，有个AKSK（“访问密钥ID”又叫“AK”，“私有访问密钥”叫“SK”）需要妥善保存（仅此一次保存csv文件的机会），当然，在创建用户的时候，SK也可以看到明文（仅此一次在控制台看到SK的明文的机会，以后就只能去csv文件看）。 配置角色（后面的实验需要用到）  在IAM控制台，选择左边的“角色”菜单，然后选择“创建角色” 选择对应的角色类型（选择“AWS产品”，然后选择“Glue”） 在筛选策略的页面，选中 AdministratorAccess 和 IAMFullAccess，然后点击下一步，不配置标签，直接审核角色配置，设置名字（此处为lab-role），确认策略，然后确认即可  恭喜你，已经完成第一步的实验准备工作。</description>
+    </item>
+    
+    <item>
+      <title>02-部署EC2</title>
+      <link>/0-prepare/02-ec2.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/0-prepare/02-ec2.html</guid>
+      <description>要完成本章节的实验，大概需要 10 分钟。
+ 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。
+ 本章节内容主要部署一个 EC2 实例（Linux）及使用不同的客户端连接（也是作为Lab1/2/4持续产生数据的客户端）。
+配置安全组  EC2（Elastic Compute Cloud）是AWS云上的计算服务，此处我们主要配置安全组（允许谁可以连接），部署一个EC2，并远程连接上去，在这个EC2里面配置好AKSK即可。
+通过如下方式打开EC2控制台 选择左侧菜单的“安全组”，在打开的页面中，选择“default”（即默认）安全组，然后选中“入站规则”，点击“编辑入站规则” 注意：我们严重不建议在生产环境中，把任何安全组做全开这种配置，这明显不符合安全最佳实践原则，此处仅供参考。
+ 此处我们选择全部放开（极度极度极度的不推荐），主要是考虑到有些人可能是第一次使用AWS，所以我们没有遵循权限最小化原则（其实主要是放开ssh的22端口，mysql的3306端口以及redis的6379端口即可） 不要修改“出站规则”，保持默认值（全开）即可。
+ 配置完的安全组“入站规则”如下（注意，不要去编辑“出站规则”，保持默认值即可） 部署EC2  EC2简单理解为AWS云上的虚拟机即可。打开EC2控制台 选择左侧菜单的“实例”，并点击“启动实例”（注意：如果你的控制台页面样子跟我们的截图不一样，请确认左上角的控制台版本选项） Amazon Linux 2 简单理解为 CentOS 的 Amazon 版本。
+ 选择AMI（Amazon Machine Image）类型为“Amazon Linux 2”，并确认架构为64位x86 机型选择t2.large或者t2.xlarge都可以（t3对应系列也可以，基本没什么负载，本着节俭的原则，选个2G以上内存的都可以满足需求） 实例配置这一页，全部默认 此处我们把这个EC2的根磁盘改成20G（默认8G，其实实验也够了，但是担心有人中间过程有错误，疯狂的打印错误日志导致根目录爆了，所以调整为20G），注意“终止时删除”的选项是选中的（默认值） 下一步标签页面，我们添加一个“键”为“Name”（注意大小写），“值”为“LinuxClient”的标签，供参考（标签可以不设置） 下一步配置安全组的时候，直接选择刚才修改过的安全组（default）即可 下一步审核页面可以确认下配置，然后直接点击“启动”，接下来会提示使用哪个密钥对（keypair）部署这个EC2，此处我们选择新建一个，并保存到本地（注意：也只有这一次可以保存，后续不能再下载了，如果要更换密钥很麻烦） 保存密钥并启动EC2 部署提交成功后，我们可以发现EC2已经开始交付，并获得对应的外网地址 此处EC2的外网地址为（如果手工停止Stop这个EC2，然后再启动Start这个EC2，这个外网IP地址会变，如果终止Terminate这个EC2，它就被删除了）
+54.169.129.145 连接EC2  如果学员使用的是Windows系统，使用例如putty这样的客户端，则需要对刚才生成的密钥做个转换才可以连接部署出来的EC2。
+ Linux(Mac)客户端连接此EC2 因为我们已经放开了安全组权限，所以找到之前下载的密钥地址（如此处为 ~/Downloads/ ），把密钥权限改成400，然后就可以直接登录了（注意登录用户是ec2-user）
+cd ~/Downloads/ chmod 400 kp-sin.pem ssh -i kp-sin.pem ec2-user@54.169.129.145 登录后如下所示 Windows客户端连接此EC2 此章节大家也可以参考AWS官方文档</description>
+    </item>
+    
+    <item>
+      <title>03-配置KDS</title>
+      <link>/0-prepare/03-kds.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/0-prepare/03-kds.html</guid>
+      <description>要完成本章节的实验，大概需要 5 分钟。
+ 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。
+ 本章节内容主要配置两个Kinesis Data Streams数据流（有时简称为kds，作为Lab1/4持续产生数据的来源）。
+创建KDS流  Kinesis是AWS云上的流计算相关服务，包括流数据接收和承载平台Kinesis Data Streams（对标Kafka），流处理管道Kinesis Data Firehose，流分析平台Kinesis Data Analytics，流视频处理平台Kinesis Video Streams。此处我们主要配置2个Kinesis Data Streams，分别用于Lab1/4使用。
+通过如下方式打开Kinesis控制台 选择左侧菜单的“数据流”，在打开的页面中，选择“创建数据流” 创建lab1需要用到的数据流（设置流名称和分片数量，此处设置为1即可） 用同样的方式创建lab2（在我们实验的过程中暂时用不到，此处仅供演示）和lab4需要用到的数据流，创建完毕后如下  恭喜你，已经完成第三步的实验准备工作。</description>
+    </item>
+    
+    <item>
+      <title>04-部署RDS</title>
+      <link>/0-prepare/04-rds.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/0-prepare/04-rds.html</guid>
+      <description>要完成本章节的实验，大概需要 10 分钟。
+ 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。
+ 本章节内容主要是部署一个关系型数据库（RDS，MySQL 5.7），并导入对应数据。
+登录RDS控制台  RDS是AWS云上的数据库平台服务，包括自主研发的Aurora，也包括基于MySQL/MariaDB/Oracle/SQL Server/PostgreSQL等不同引擎的关系型数据库，此处我们部署的RDS（MySQL 5.7）主要用于Lab2使用。
+通过如下方式打开RDS控制台 配置参数组和选项组  选择左侧菜单“参数组”，然后点击右侧“创建参数组” 选择参数组系列为“mysql5.7”，然后输入对应的名字和描述，点击“创建”即可 创建完毕后，点击参数组名字后打开刚才创建的参数组 在参数那里输入character_，并选择“编辑参数” 因为我们要在命令行操作中文内容的记录，所以需要修改数据库的编码，否则容易出现乱码的问题。此处我们把所有能修改的“值”全部改成utf8mb4，并点击“保存更改”即可 选择左侧菜单“选项组”，然后点击右侧“创建组” 输入对应的名字，备注，引擎和版本后保存，即可 部署RDS数据库  选择左侧菜单“数据库”，然后点击右侧“创建数据库” 接下来选择数据库的引擎，版本和模板，如截图所示 接下来设置数据库实例名称，管理员名称和密码（此处为：QazWsx2020，可自定义，主要是自己要记住别忘记）以及选择数据库类型 存储，可用性和网络连接选默认值即可 数据库使用“密码身份认证”方式，点开“其他配置”，输入数据库名字（此处为bdd），选择刚才创建的“参数组”和“选项组”，其他全部默认，拉到最下面点击“创建数据库”即可 要数据库完全准备好，大概需要5分钟左右。
+ 数据库准备好以后，点击数据库名字，出现连接和安全性页面，把对应的终端节点内容复制出来，此处为
+bdd.cmyyzdtxltwq.ap-southeast-1.rds.amazonaws.com 如下图所示 导入数据  大家把如下sql下载到部署好的EC2客户端里面   bdd database sql   bdd.sql (3 )    然后登陆EC2客户端，安装mysql客户端
+sudo yum install mysql -y 然后使用mysql客户端用如下命令登录数据库（紧接着需要输入密码）
+mysql -h bdd.cmyyzdtxltwq.ap-southeast-1.rds.amazonaws.com -u admin -p bdd 使用命令导入数据（如果上传和保存的目录不是 ~/sql/bdd.sql，记得同步修改）
+source ~/sql/bdd.sql 然后检查数据库内容是否和截图匹配 此处我们有4个表，内容分别如下</description>
+    </item>
+    
+    <item>
+      <title>05-部署EMR</title>
+      <link>/0-prepare/05-emr.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/0-prepare/05-emr.html</guid>
+      <description>要完成本章节的实验，大概需要5分钟，因为我们只部署EMR，暂时不用做配置工作。
+ 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。
+ 本章节内容只需要部署一个EMR集群，暂时不做配置。
+部署EMR  EMR（Elastic MapReduce）是AWS上的一个托管集群平台，可简化在 AWS 上运行大数据框架（如 Apache Hadoop 和 Apache Spark 等）以处理和分析海量数据的操作。
+通过如下方式打开EMR控制台 直接选择“创建集群” 出现创建页面的时候，选择“转到高级选项” 选择对应的版本（默认最新版），选择Spark（Lab2需要用到），勾选使用Glue做Catalog，然后进入下一步 第二步的硬件配置页面，全部选默认即可 第三步的配置集群信息，参考如下截图 然后选择对应的密钥对（此处为kp-sin），点击“创建集群”即可 集群全部部署完毕需要5分钟左右，但是我们不需要等待，因为Lab2才需要用到。
+ 恭喜你，已经完成第五步的实验准备工作。</description>
+    </item>
+    
+    <item>
+      <title>06-部署Elasticsearch</title>
+      <link>/0-prepare/06-es.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/0-prepare/06-es.html</guid>
+      <description>要完成本章节的实验，大概需要5分钟，因为我们只部署ES，暂时不用做配置工作。
+ 如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。
+ 本章节内容只需要部署一个Elasticsearch集群，暂时不做其他配置。
+部署Elasticsearch  Elasticsearch Service (Amazon ES) 是一种托管服务，可以让您轻松在 AWS 云中部署、操作和扩展 Elasticsearch 集群。
+通过如下方式打开ES控制台 如果是第一次使用，会出现如下页面，选择“创建新域”即可 我们选择开发测试和最新版 在配置页面我们设置集群名字（此处为lab-es），并设置数据节点的EBS磁盘大小为100G 在安全配置页面，我们选择部署在vpc内部（这样公网就访问不了），并选择对应的网络和安全组，取消选择“启用精细访问控制”，并在VPC内“允许对域进行公开访问”，如下截图所示 其他设置默认，审核请确认后创建集群。集群Domain全部部署完毕需要10分钟左右，但是我们不需要等待，因为Lab4才需要用到。
+ 恭喜你，已经完成第六步的实验准备工作。接下来开始真正的大数据和数据湖相关的动手实验了。</description>
+    </item>
+    
+  </channel>
+</rss>

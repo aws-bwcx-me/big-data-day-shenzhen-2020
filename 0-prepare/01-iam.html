@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="cn" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.74.3" />
+    <meta name="description" content="AWS Technical Event">
+<meta name="author" content="Weiqiong Chen/Robin Long">
+
+    <link rel="icon" href="../images/favicon.ico" type="image/png">
+
+    <title>01-账号配置 :: AWS Big Data Day</title>
+
+    
+    <link href="../css/nucleus.css?1649507867" rel="stylesheet">
+    <link href="../css/fontawesome-all.min.css?1649507867" rel="stylesheet">
+    <link href="../css/hybrid.css?1649507867" rel="stylesheet">
+    <link href="../css/featherlight.min.css?1649507867" rel="stylesheet">
+    <link href="../css/perfect-scrollbar.min.css?1649507867" rel="stylesheet">
+    <link href="../css/auto-complete.css?1649507867" rel="stylesheet">
+    <link href="../css/atom-one-dark-reasonable.css?1649507867" rel="stylesheet">
+    <link href="../css/theme.css?1649507867" rel="stylesheet">
+    <link href="../css/tabs.css?1649507867" rel="stylesheet">
+    <link href="../css/hugo-theme.css?1649507867" rel="stylesheet">
+    
+    <link href="../css/theme-aws.css?1649507867" rel="stylesheet">
+    
+    
+
+    <script src="../js/jquery-3.3.1.min.js?1649507867"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="../0-prepare/01-iam.html">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <div>
+   <a href="../" title="Go Index">
+       <img style="vertical-align:middle" src="../images/logo.png" height="70px" />
+   </a>
+ </div>
+ 
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="../js/lunr.min.js?1649507867"></script>
+<script type="text/javascript" src="../js/auto-complete.js?1649507867"></script>
+<script type="text/javascript">
+    
+        var baseurl = "";
+    
+</script>
+<script type="text/javascript" src="../js/search.js?1649507867"></script>
+
+    
+  </div>
+  
+    <section id="homelinks">
+      <ul>
+        <li>
+            <a class="padding" href='../'><i class='fas fa-home'></i> Home</a>
+        </li>
+      </ul>
+    </section>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/0-prepare.html" title="0-实验准备" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="../0-prepare.html">
+          <b> </b>0-实验准备
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/01-iam.html" title="01-账号配置" class="dd-item active">
+        <a href="../0-prepare/01-iam.html">
+        <b> </b>01-账号配置
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/02-ec2.html" title="02-部署EC2" class="dd-item ">
+        <a href="../0-prepare/02-ec2.html">
+        <b> </b>02-部署EC2
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/03-kds.html" title="03-配置KDS" class="dd-item ">
+        <a href="../0-prepare/03-kds.html">
+        <b> </b>03-配置KDS
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/04-rds.html" title="04-部署RDS" class="dd-item ">
+        <a href="../0-prepare/04-rds.html">
+        <b> </b>04-部署RDS
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/05-emr.html" title="05-部署EMR" class="dd-item ">
+        <a href="../0-prepare/05-emr.html">
+        <b> </b>05-部署EMR
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/06-es.html" title="06-部署Elasticsearch" class="dd-item ">
+        <a href="../0-prepare/06-es.html">
+        <b> </b>06-部署Elasticsearch
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-lab1.html" title="1-Lab1(流数据处理)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../1-lab1.html">
+          <b> </b>1-Lab1(流数据处理)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/1-lab1/11-kds.html" title="11-Kinesis流数据产生" class="dd-item ">
+        <a href="../1-lab1/11-kds.html">
+        <b> </b>11-Kinesis流数据产生
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/1-lab1/12-kas.html" title="12-Kinesis流数据分析" class="dd-item ">
+        <a href="../1-lab1/12-kas.html">
+        <b> </b>12-Kinesis流数据分析
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-lab2.html" title="2-Lab2(批量数据处理)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../2-lab2.html">
+          <b> </b>2-Lab2(批量数据处理)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/2-lab2/21-etl.html" title="21-数据处理（ETL）" class="dd-item ">
+        <a href="../2-lab2/21-etl.html">
+        <b> </b>21-数据处理（ETL）
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/2-lab2/22-emr.html" title="22-数据分析（EMR）" class="dd-item ">
+        <a href="../2-lab2/22-emr.html">
+        <b> </b>22-数据分析（EMR）
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-lab3.html" title="3-Lab3(数据可视化)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../3-lab3.html">
+          <b> </b>3-Lab3(数据可视化)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/3-lab3/31-athena.html" title="31-构建数据表" class="dd-item ">
+        <a href="../3-lab3/31-athena.html">
+        <b> </b>31-构建数据表
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/3-lab3/32-quicksight.html" title="32-数据可视化" class="dd-item ">
+        <a href="../3-lab3/32-quicksight.html">
+        <b> </b>32-数据可视化
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-lab4.html" title="4-Lab4(数据实时检索)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../4-lab4.html">
+          <b> </b>4-Lab4(数据实时检索)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/4-lab4/41-widtable.html" title="41-构建宽表" class="dd-item ">
+        <a href="../4-lab4/41-widtable.html">
+        <b> </b>41-构建宽表
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/4-lab4/42-es.html" title="42-实时检索和可视化" class="dd-item ">
+        <a href="../4-lab4/42-es.html">
+        <b> </b>42-实时检索和可视化
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-cleanup.html" title="5-环境清理" class="dd-item
+        
+        
+        
+        ">
+      <a href="../5-cleanup.html">
+          <b> </b>5-环境清理
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/about.html" title="关于我们" class="dd-item
+        
+        
+        
+        ">
+      <a href="../about.html">
+          关于我们
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> </a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <left>
+	<h5 class="copyright">CopyRight: &copy; 2022 bwcx.me.
+		<BR>Author: Weiqiong Chen/Robin Long
+		<BR>Update: 2022-04
+	<h5>
+</left>
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='../'>Bigdata-Day</a> > <a href='../0-prepare.html'>0-实验准备</a> > 01-账号配置
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#获取aws账号登录控制台用">获取AWS账号（登录控制台用）</a></li>
+    <li><a href="#添加用户为了获取aksk">添加用户（为了获取AKSK）</a></li>
+    <li><a href="#配置角色后面的实验需要用到">配置角色（后面的实验需要用到）</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              01-账号配置
+            </h1>
+          
+
+        
+
+
+
+<div class="notices info" ><p>如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。</p>
+</div>
+
+<p>本章节我们配置和安全相关的内容（账号，权限等）。</p>
+<h2 id="获取aws账号登录控制台用">获取AWS账号（登录控制台用）</h2>
+<hr>
+<p>如果已经有AWS的控制台登录账号，用接下来的这个 URL 直接登录即可，可以略过获取账号这部分（但是建议有对应管理权限），需要注意的是我们演示的环境为AWS的新加坡区域，如果学员使用的是国内的区域，则略有区别，仅供参考。</p>
+<p>AWS控制台地址</p>
+<pre><code>https://console.aws.amazon.com/console/home
+</code></pre><p>如果是参加现场实验的学员，你会获得一个现场指导老师发给你的 hash 码，类似这样的</p>
+<pre><code>4b8b-0bd9571f14-c4
+</code></pre><p>可以通过如下方式登录实验环境（请自动替换你拿到的 hash 码）</p>
+<pre><code>https://dashboard.eventengine.run/login?hash=4b8b-0bd9571f14-c4
+</code></pre><p>通过这个地址登录AWS控制台（第一次需要接受系统协议的提醒）
+<img src="../images/0/accept.png" alt=""></p>
+<p>选择登录控制台
+<img src="../images/0/console-url.png" alt=""></p>
+<p>点击“Open AWS Console”直接打开控制台（不需要输入用户密码这些，默认具备管理员权限），请注意绿色方框的 Region 是否正是ap-southesat-1（对应新加坡区域）
+<img src="../images/0/console-confirm.png" alt=""></p>
+<p>其他未提醒的内容不用关注，后面需要用到会有提醒的。</p>
+<h2 id="添加用户为了获取aksk">添加用户（为了获取AKSK）</h2>
+<hr>
+<p>IAM（Identity and Access Management）是AWS和用户，权限以及认证等安全相关的服务，此处我们主要配置一个只能编程使用的用户（此处为获取对应的aksk，因为市场活动默认的 Hash 码的登录用户不能自己给自己创建 aksk），一个授权的角色（Role）。</p>
+<p>通过如下方式打开IAM控制台
+<img src="../images/0/iam-console.png" alt=""></p>
+<p>点击左边的“用户”菜单，然后选择“添加用户”
+<img src="../images/0/iam-user.png" alt=""></p>
+<p>设置用户名（例如此处为<code>cliuser</code>，只选择“编程访问”（获取一对aksk），然后选择“下一步：权限”
+<img src="../images/0/iam-user-add.png" alt=""></p>
+<p>在设置权限的页面，点击“直接附加现有策略”，添加 <code>AdministratorAccess</code> 和 <code>IAMFullAccess</code> 两个
+<img src="../images/0/iam-user-rights.png" alt=""></p>
+<p>下一步标签页面可以不配置，接着下一步审核页面，确认策略已经正确添加
+<img src="../images/0/iam-user-review.png" alt=""></p>
+<p>用户创建成功后，有个AKSK（“访问密钥ID”又叫“AK”，“私有访问密钥”叫“SK”）需要妥善保存（仅此一次保存csv文件的机会），当然，在创建用户的时候，SK也可以看到明文（仅此一次在控制台看到SK的明文的机会，以后就只能去csv文件看）。
+<img src="../images/0/iam-user-success.png" alt=""></p>
+<h2 id="配置角色后面的实验需要用到">配置角色（后面的实验需要用到）</h2>
+<hr>
+<p>在IAM控制台，选择左边的“角色”菜单，然后选择“创建角色”
+<img src="../images/0/iam-role.png" alt=""></p>
+<p>选择对应的角色类型（选择“AWS产品”，然后选择“Glue”）
+<img src="../images/0/iam-role-type.png" alt=""></p>
+<p>在筛选策略的页面，选中 <code>AdministratorAccess</code> 和 <code>IAMFullAccess</code>，然后点击下一步，不配置标签，直接审核角色配置，设置名字（此处为lab-role），确认策略，然后确认即可
+<img src="../images/0/iam-role-review.png" alt=""></p>
+<hr>
+<p>恭喜你，已经完成第一步的实验准备工作。</p>
+
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="../0-prepare.html" title="0-实验准备"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="../0-prepare/02-ec2.html" title="02-部署EC2" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="../js/clipboard.min.js?1649507867"></script>
+    <script src="../js/perfect-scrollbar.min.js?1649507867"></script>
+    <script src="../js/perfect-scrollbar.jquery.min.js?1649507867"></script>
+    <script src="../js/jquery.sticky.js?1649507867"></script>
+    <script src="../js/featherlight.min.js?1649507867"></script>
+    <script src="../js/highlight.pack.js?1649507867"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="../js/modernizr.custom-3.6.0.js?1649507867"></script>
+    <script src="../js/learn.js?1649507867"></script>
+    <script src="../js/hugo-learn.js?1649507867"></script>
+    
+        
+            <script src="../mermaid/mermaid.js?1649507867"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
+</html>
+

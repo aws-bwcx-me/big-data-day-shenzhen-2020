@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>5-环境清理 on AWS Big Data Day</title>
+    <link>/5-cleanup.html</link>
+    <description>Recent content in 5-环境清理 on AWS Big Data Day</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    
+	<atom:link href="/5-cleanup/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+  </channel>
+</rss>

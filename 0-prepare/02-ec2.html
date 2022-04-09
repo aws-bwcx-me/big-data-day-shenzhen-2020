@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="cn" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.74.3" />
+    <meta name="description" content="AWS Technical Event">
+<meta name="author" content="Weiqiong Chen/Robin Long">
+
+    <link rel="icon" href="../images/favicon.ico" type="image/png">
+
+    <title>02-部署EC2 :: AWS Big Data Day</title>
+
+    
+    <link href="../css/nucleus.css?1649507867" rel="stylesheet">
+    <link href="../css/fontawesome-all.min.css?1649507867" rel="stylesheet">
+    <link href="../css/hybrid.css?1649507867" rel="stylesheet">
+    <link href="../css/featherlight.min.css?1649507867" rel="stylesheet">
+    <link href="../css/perfect-scrollbar.min.css?1649507867" rel="stylesheet">
+    <link href="../css/auto-complete.css?1649507867" rel="stylesheet">
+    <link href="../css/atom-one-dark-reasonable.css?1649507867" rel="stylesheet">
+    <link href="../css/theme.css?1649507867" rel="stylesheet">
+    <link href="../css/tabs.css?1649507867" rel="stylesheet">
+    <link href="../css/hugo-theme.css?1649507867" rel="stylesheet">
+    
+    <link href="../css/theme-aws.css?1649507867" rel="stylesheet">
+    
+    
+
+    <script src="../js/jquery-3.3.1.min.js?1649507867"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="../0-prepare/02-ec2.html">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <div>
+   <a href="../" title="Go Index">
+       <img style="vertical-align:middle" src="../images/logo.png" height="70px" />
+   </a>
+ </div>
+ 
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="../js/lunr.min.js?1649507867"></script>
+<script type="text/javascript" src="../js/auto-complete.js?1649507867"></script>
+<script type="text/javascript">
+    
+        var baseurl = "";
+    
+</script>
+<script type="text/javascript" src="../js/search.js?1649507867"></script>
+
+    
+  </div>
+  
+    <section id="homelinks">
+      <ul>
+        <li>
+            <a class="padding" href='../'><i class='fas fa-home'></i> Home</a>
+        </li>
+      </ul>
+    </section>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/0-prepare.html" title="0-实验准备" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="../0-prepare.html">
+          <b> </b>0-实验准备
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/01-iam.html" title="01-账号配置" class="dd-item ">
+        <a href="../0-prepare/01-iam.html">
+        <b> </b>01-账号配置
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/02-ec2.html" title="02-部署EC2" class="dd-item active">
+        <a href="../0-prepare/02-ec2.html">
+        <b> </b>02-部署EC2
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/03-kds.html" title="03-配置KDS" class="dd-item ">
+        <a href="../0-prepare/03-kds.html">
+        <b> </b>03-配置KDS
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/04-rds.html" title="04-部署RDS" class="dd-item ">
+        <a href="../0-prepare/04-rds.html">
+        <b> </b>04-部署RDS
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/05-emr.html" title="05-部署EMR" class="dd-item ">
+        <a href="../0-prepare/05-emr.html">
+        <b> </b>05-部署EMR
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/0-prepare/06-es.html" title="06-部署Elasticsearch" class="dd-item ">
+        <a href="../0-prepare/06-es.html">
+        <b> </b>06-部署Elasticsearch
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/1-lab1.html" title="1-Lab1(流数据处理)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../1-lab1.html">
+          <b> </b>1-Lab1(流数据处理)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/1-lab1/11-kds.html" title="11-Kinesis流数据产生" class="dd-item ">
+        <a href="../1-lab1/11-kds.html">
+        <b> </b>11-Kinesis流数据产生
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/1-lab1/12-kas.html" title="12-Kinesis流数据分析" class="dd-item ">
+        <a href="../1-lab1/12-kas.html">
+        <b> </b>12-Kinesis流数据分析
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/2-lab2.html" title="2-Lab2(批量数据处理)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../2-lab2.html">
+          <b> </b>2-Lab2(批量数据处理)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/2-lab2/21-etl.html" title="21-数据处理（ETL）" class="dd-item ">
+        <a href="../2-lab2/21-etl.html">
+        <b> </b>21-数据处理（ETL）
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/2-lab2/22-emr.html" title="22-数据分析（EMR）" class="dd-item ">
+        <a href="../2-lab2/22-emr.html">
+        <b> </b>22-数据分析（EMR）
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/3-lab3.html" title="3-Lab3(数据可视化)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../3-lab3.html">
+          <b> </b>3-Lab3(数据可视化)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/3-lab3/31-athena.html" title="31-构建数据表" class="dd-item ">
+        <a href="../3-lab3/31-athena.html">
+        <b> </b>31-构建数据表
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/3-lab3/32-quicksight.html" title="32-数据可视化" class="dd-item ">
+        <a href="../3-lab3/32-quicksight.html">
+        <b> </b>32-数据可视化
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/4-lab4.html" title="4-Lab4(数据实时检索)" class="dd-item
+        
+        
+        
+        ">
+      <a href="../4-lab4.html">
+          <b> </b>4-Lab4(数据实时检索)
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/4-lab4/41-widtable.html" title="41-构建宽表" class="dd-item ">
+        <a href="../4-lab4/41-widtable.html">
+        <b> </b>41-构建宽表
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/4-lab4/42-es.html" title="42-实时检索和可视化" class="dd-item ">
+        <a href="../4-lab4/42-es.html">
+        <b> </b>42-实时检索和可视化
+        <i class="fas fa-check read-icon"></i>
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/5-cleanup.html" title="5-环境清理" class="dd-item
+        
+        
+        
+        ">
+      <a href="../5-cleanup.html">
+          <b> </b>5-环境清理
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/about.html" title="关于我们" class="dd-item
+        
+        
+        
+        ">
+      <a href="../about.html">
+          关于我们
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> </a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <left>
+	<h5 class="copyright">CopyRight: &copy; 2022 bwcx.me.
+		<BR>Author: Weiqiong Chen/Robin Long
+		<BR>Update: 2022-04
+	<h5>
+</left>
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='../'>Bigdata-Day</a> > <a href='../0-prepare.html'>0-实验准备</a> > 02-部署EC2
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#配置安全组">配置安全组</a></li>
+    <li><a href="#部署ec2">部署EC2</a></li>
+    <li><a href="#连接ec2">连接EC2</a>
+      <ul>
+        <li><a href="#linuxmac客户端连接此ec2">Linux(Mac)客户端连接此EC2</a></li>
+        <li><a href="#windows客户端连接此ec2">Windows客户端连接此EC2</a></li>
+      </ul>
+    </li>
+    <li><a href="#配置ec2">配置EC2</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              02-部署EC2
+            </h1>
+          
+
+        
+
+
+<hr>
+
+<div class="notices tip" ><p>要完成本章节的实验，大概需要 10 分钟。</p>
+</div>
+
+
+<div class="notices info" ><p>如果在我们的文字描述和截图中均未涉及的选项或者页面，取默认值即可。</p>
+</div>
+
+<p>本章节内容主要部署一个 EC2 实例（Linux）及使用不同的客户端连接（也是作为Lab1/2/4持续产生数据的客户端）。</p>
+<h2 id="配置安全组">配置安全组</h2>
+<hr>
+<p>EC2（Elastic Compute Cloud）是AWS云上的计算服务，此处我们主要配置安全组（允许谁可以连接），部署一个EC2，并远程连接上去，在这个EC2里面配置好AKSK即可。</p>
+<p>通过如下方式打开EC2控制台
+<img src="../images/0/ec2-console.png" alt=""></p>
+<p>选择左侧菜单的“安全组”，在打开的页面中，选择“default”（即默认）安全组，然后选中“入站规则”，点击“编辑入站规则”
+<img src="../images/0/ec2-sg-select.png" alt=""></p>
+
+<div class="notices warning" ><p>注意：我们严重不建议在生产环境中，把任何安全组做全开这种配置，这明显不符合安全最佳实践原则，此处仅供参考。</p>
+</div>
+
+<p>此处我们选择全部放开（极度极度极度的不推荐），主要是考虑到有些人可能是第一次使用AWS，所以我们没有遵循权限最小化原则（其实主要是放开ssh的22端口，mysql的3306端口以及redis的6379端口即可）
+<img src="../images/0/ec2-sg-rules.png" alt=""></p>
+
+<div class="notices warning" ><p>不要修改“出站规则”，保持默认值（全开）即可。</p>
+</div>
+
+<p>配置完的安全组“入站规则”如下（注意，不要去编辑“出站规则”，保持默认值即可）
+<img src="../images/0/ec2-sg-review.png" alt=""></p>
+<h2 id="部署ec2">部署EC2</h2>
+<hr>
+<p>EC2简单理解为AWS云上的虚拟机即可。打开EC2控制台
+<img src="../images/0/ec2-console.png" alt=""></p>
+<p>选择左侧菜单的“实例”，并点击“启动实例”（注意：如果你的控制台页面样子跟我们的截图不一样，请确认左上角的控制台版本选项）
+<img src="../images/0/ec2-create.png" alt=""></p>
+
+<div class="notices tip" ><p>Amazon Linux 2 简单理解为 CentOS 的 Amazon 版本。</p>
+</div>
+
+<p>选择AMI（Amazon Machine Image）类型为“Amazon Linux 2”，并确认架构为64位x86
+<img src="../images/0/ec2-d1.png" alt=""></p>
+<p>机型选择t2.large或者t2.xlarge都可以（t3对应系列也可以，基本没什么负载，本着节俭的原则，选个2G以上内存的都可以满足需求）
+<img src="../images/0/ec2-d2.png" alt=""></p>
+<p>实例配置这一页，全部默认
+<img src="../images/0/ec2-d3.png" alt=""></p>
+<p>此处我们把这个EC2的根磁盘改成20G（默认8G，其实实验也够了，但是担心有人中间过程有错误，疯狂的打印错误日志导致根目录爆了，所以调整为20G），注意“终止时删除”的选项是选中的（默认值）
+<img src="../images/0/ec2-d4.png" alt=""></p>
+<p>下一步标签页面，我们添加一个“键”为“Name”（注意大小写），“值”为“LinuxClient”的标签，供参考（标签可以不设置）
+<img src="../images/0/ec2-d5.png" alt=""></p>
+<p>下一步配置安全组的时候，直接选择刚才修改过的安全组（default）即可
+<img src="../images/0/ec2-d6.png" alt=""></p>
+<p>下一步审核页面可以确认下配置，然后直接点击“启动”，接下来会提示使用哪个密钥对（keypair）部署这个EC2，此处我们选择新建一个，并保存到本地（注意：也只有这一次可以保存，后续不能再下载了，如果要更换密钥很麻烦）
+<img src="../images/0/ec2-d7.png" alt=""></p>
+<p>保存密钥并启动EC2
+<img src="../images/0/ec2-d8.png" alt=""></p>
+<p>部署提交成功后，我们可以发现EC2已经开始交付，并获得对应的外网地址
+<img src="../images/0/ec2-success.png" alt=""></p>
+<p>此处EC2的外网地址为（如果手工停止Stop这个EC2，然后再启动Start这个EC2，这个外网IP地址会变，如果终止Terminate这个EC2，它就被删除了）</p>
+<pre><code>54.169.129.145
+</code></pre><h2 id="连接ec2">连接EC2</h2>
+<hr>
+
+<div class="notices info" ><p>如果学员使用的是Windows系统，使用例如putty这样的客户端，则需要对刚才生成的密钥做个转换才可以连接部署出来的EC2。</p>
+</div>
+
+<h3 id="linuxmac客户端连接此ec2">Linux(Mac)客户端连接此EC2</h3>
+<p>因为我们已经放开了安全组权限，所以找到之前下载的密钥地址（如此处为 ~/Downloads/ ），把密钥权限改成400，然后就可以直接登录了（注意登录用户是ec2-user）</p>
+<pre><code>cd ~/Downloads/
+chmod 400 kp-sin.pem
+ssh -i kp-sin.pem ec2-user@54.169.129.145
+</code></pre><p>登录后如下所示
+<img src="../images/0/ec2-login-linux.png" alt=""></p>
+<h3 id="windows客户端连接此ec2">Windows客户端连接此EC2</h3>
+<p>此章节大家也可以参考AWS官方文档</p>
+<pre><code>https://docs.aws.amazon.com/zh_cn/AWSEC2/latest/UserGuide/putty.html
+</code></pre><p>此处我们需要使用到 putty（客户端）和 puttygen（转换密钥的工具），大家可以去官网下载</p>
+<pre><code>https://www.chiark.greenend.org.uk/~sgtatham/putty/
+</code></pre><p>为了方便大家使用，我们已经给大家准备好了，可以直接从下面这里下载（Windows，64位）</p>
+<section class="attachments ">
+  <label>
+    <i class="fas fa-paperclip" aria-hidden="true"></i>
+    putty and puttygen
+  </label>
+  <div class="attachments-files">
+    <li>
+      <a href="../0-prepare/02-ec2.files/putty.exe">putty.exe</a>
+      (1 )
+    </li>
+    <li>
+      <a href="../0-prepare/02-ec2.files/puttygen.exe">puttygen.exe</a>
+      (680 )
+    </li>
+  </div>
+</section>
+
+<p>下载好了以后，启动 puttygen.exe 文件，把下载的密钥key文件做个转换并保存。过程如下</p>
+<p>1).在 Type of key to generate 下，选择 RSA：
+<img src="../images/0/ec2-w-1.jpeg" alt=""></p>
+<p>2).选择 Load，选择在启动实例时指定的密钥对的 .pem 文件，然后选择 Open (打开)。PuTTYgen 会显示一个通知，指示已成功导入 .pem 文件。</p>
+<p>3).为密钥指定您用于密钥对的相同名称（例如 kp-bdd-sin-com）并选择 Save (保存私钥)。PuTTY 会自动添加 .ppk 文件扩展名。
+<img src="../images/0/ec2-w-2.jpeg" alt=""></p>
+<p>4).打开 putty.exe，输入EC2实例地址
+<img src="../images/0/ec2-w-3.jpeg" alt=""></p>
+<p>配置key：
+<img src="../images/0/ec2-w-4.jpeg" alt=""></p>
+<p>出现login as输入提示框的时候，输入：<code>ec2-user</code>，即可顺利登录EC2实例
+<img src="../images/0/ec2-w-5.jpeg" alt=""></p>
+<h2 id="配置ec2">配置EC2</h2>
+<hr>
+
+<div class="notices tip" ><p>此处只配置aksk并简单验证ec2具备对应权限。</p>
+</div>
+
+<p>登录EC2后，执行配置</p>
+<pre><code>aws configure
+</code></pre><p>然后输入创建用户时获得的AKSK（或者打开下载的csv文件找到AKSK），以及对应的region（ap-southeast-1），然后执行权限测试命令</p>
+<pre><code>aws s3 ls
+</code></pre><p>不会有任何返回，因为我们还没开始做实验，S3是空的，只要不报错，就表示配置是成功的。
+<img src="../images/0/ec2-final.png" alt=""></p>
+<hr>
+<p>恭喜你，已经完成第二步的实验准备工作。</p>
+
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="../0-prepare/01-iam.html" title="01-账号配置"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="../0-prepare/03-kds.html" title="03-配置KDS" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="../js/clipboard.min.js?1649507867"></script>
+    <script src="../js/perfect-scrollbar.min.js?1649507867"></script>
+    <script src="../js/perfect-scrollbar.jquery.min.js?1649507867"></script>
+    <script src="../js/jquery.sticky.js?1649507867"></script>
+    <script src="../js/featherlight.min.js?1649507867"></script>
+    <script src="../js/highlight.pack.js?1649507867"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="../js/modernizr.custom-3.6.0.js?1649507867"></script>
+    <script src="../js/learn.js?1649507867"></script>
+    <script src="../js/hugo-learn.js?1649507867"></script>
+    
+        
+            <script src="../mermaid/mermaid.js?1649507867"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    
+
+  </body>
+</html>
+
